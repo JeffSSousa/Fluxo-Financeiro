@@ -3,6 +3,8 @@ package com.jeffssousa.fluxo.service;
 
 import com.jeffssousa.fluxo.dto.UserCreateDTO;
 import com.jeffssousa.fluxo.entities.User;
+import com.jeffssousa.fluxo.exception.business.EmailAlreadyExistsException;
+import com.jeffssousa.fluxo.exception.business.UserNotFoundException;
 import com.jeffssousa.fluxo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,12 @@ public class UserService {
     private final PasswordEncoder encoder;
 
     public void register(UserCreateDTO dto){
+
+        if (userRepository.findByEmail(dto.email()) != null){
+            String msg = "Este e-mail já está vinculado a uma conta";
+            log.warn("{} | {}", msg, dto.email());
+            throw new EmailAlreadyExistsException(msg);
+        }
 
         log.info("Criando novo usuario");
 
