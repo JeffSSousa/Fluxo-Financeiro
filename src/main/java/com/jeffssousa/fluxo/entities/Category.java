@@ -32,4 +32,13 @@ public class Category {
     @OneToMany(mappedBy = "category")
     private List<Expense> expenses;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public Category(String name, CategoryType type, User user) {
+        this.name = name;
+        this.type = type;
+        this.user = user;
+    }
 }

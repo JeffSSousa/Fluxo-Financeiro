@@ -31,4 +31,16 @@ public class User {
     )
     @Column(name = "role")
     List<String> roles;
+
+    @OneToMany(mappedBy = "user")
+    private List<Income> incomes;
+
+    @OneToMany(mappedBy = "user")
+    private List<Expense> expenses;
+
+    @OneToMany(mappedBy = "user")
+    private List<Category> categories;
+
+    @OneToOne(mappedBy = "user")
+    private UserProfile profile;
 }

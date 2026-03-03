@@ -7,6 +7,7 @@ public record ExpenseRequestDTO(
         String description,
         BigDecimal amount,
         LocalDateTime transactionDate,
-        boolean status
+        boolean status,
+        String category
     ) {
 }
