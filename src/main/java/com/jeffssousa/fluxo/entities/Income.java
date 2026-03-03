@@ -27,4 +27,10 @@ public class Income {
     private LocalDateTime transactionDate;
     private boolean status; // received/ not received
 
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+
+
 }

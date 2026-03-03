@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -26,5 +27,9 @@ public class Expense {
     private BigDecimal amount;
     private LocalDateTime transactionDate;
     private boolean status; // paid/ not paid
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 
 }
