@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 @Repository
@@ -20,4 +21,6 @@ public interface IncomeRepository extends JpaRepository<Income, UUID> {
        WHERE i.user = :user
        """)
     BigDecimal sumByUser(@Param("user") User user);
+
+    List<Income> findAllByUser(User user);
 }
