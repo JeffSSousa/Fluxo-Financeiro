@@ -1,6 +1,7 @@
 package com.jeffssousa.fluxo.service;
 
 import com.jeffssousa.fluxo.dto.ExpenseRequestDTO;
+import com.jeffssousa.fluxo.dto.ExpenseResponseDTO;
 import com.jeffssousa.fluxo.entities.Category;
 import com.jeffssousa.fluxo.entities.Expense;
 import com.jeffssousa.fluxo.entities.User;
@@ -12,6 +13,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -61,5 +64,19 @@ public class ExpenseService {
                 expense.getAmount());
 
         return expense;
+    }
+
+    public List<ExpenseResponseDTO> getAll() {
+
+        User user = userService.getAuthenticatedUser();
+        log.info("Iniciando busca de todas as despesas - user: {}", user.getEmail());
+
+        List<Expense> list = expenseRepository.findAllByUser(user);
+        log.info("encontrado {} despesas - user: {}", list.size(),user.getEmail());
+
+        return list.stream()
+                .sorted((e1,e2) -> e1.getTransactionDate().compareTo(e2.getTransactionDate()))
+                .map(mapper::toDto)
+                .toList();
     }
 }
