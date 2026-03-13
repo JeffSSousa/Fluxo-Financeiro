@@ -37,4 +37,10 @@ public class IncomeController {
 
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable UUID id){
+        incomeService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

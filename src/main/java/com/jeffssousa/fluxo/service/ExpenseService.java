@@ -102,4 +102,23 @@ public class ExpenseService {
         return mapper.toDto(expense);
 
     }
+
+    public void deleteById(UUID id){
+
+        User user = userService.getAuthenticatedUser();
+
+        log.info("deletando despesa por ID - user: {}", user.getEmail());
+
+        Expense expense = expenseRepository.findById(id)
+                .orElseThrow(() -> new TransactionNotFound("Expense não encontrada!"));
+        UUID expenseUserId = expense.getUser().getUserId();
+
+        if (!user.getUserId().equals(expenseUserId)){
+            throw new UnauthorizedResourceAccessException("Você não pode acessar essa transação");
+        }
+
+        expenseRepository.deleteById(expense.getExpenseId());
+        log.info("Despesa do ID: {} eliminada com sucesso - user: {}", user.getUserId(),user.getEmail());
+
+    }
 }

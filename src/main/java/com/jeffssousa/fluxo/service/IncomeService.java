@@ -14,7 +14,6 @@ import com.jeffssousa.fluxo.repository.IncomeRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -104,5 +103,25 @@ public class IncomeService {
         log.info("Busca de receita por id realizada  com sucesso - user: {}",user.getEmail());
 
         return mapper.toDTO(income);
+    }
+
+    public void deleteById(UUID id){
+
+        User user = userService.getAuthenticatedUser();
+
+        log.info("deletando receita por ID - user: {}", user.getEmail());
+
+
+        Income income = incomeRepository.findById(id)
+                .orElseThrow(() -> new TransactionNotFound("Expense não encontrada!"));
+        UUID incomeUserId = income.getUser().getUserId();
+
+        if (!user.getUserId().equals(incomeUserId)){
+            throw new UnauthorizedResourceAccessException("Você não pode acessar essa transação");
+        }
+
+        incomeRepository.deleteById(income.getIncomeId());
+        log.info("Receita do ID: {} eliminada com sucesso - user: {}", user.getUserId(),user.getEmail());
+
     }
 }
