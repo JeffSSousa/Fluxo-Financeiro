@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("income")
@@ -26,6 +27,14 @@ public class IncomeController {
     @GetMapping
     public ResponseEntity<List<IncomeResponseDTO>> getAll(){
         return ResponseEntity.ok(incomeService.getAll());
+    }
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<IncomeResponseDTO> getIncomeById(@PathVariable UUID id){
+        IncomeResponseDTO dto = incomeService.getById(id);
+        return ResponseEntity.ok(dto);
+
     }
 
 }

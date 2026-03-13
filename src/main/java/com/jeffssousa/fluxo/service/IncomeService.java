@@ -6,6 +6,8 @@ import com.jeffssousa.fluxo.entities.Category;
 import com.jeffssousa.fluxo.entities.Income;
 import com.jeffssousa.fluxo.entities.User;
 import com.jeffssousa.fluxo.enums.CategoryType;
+import com.jeffssousa.fluxo.exception.business.TransactionNotFound;
+import com.jeffssousa.fluxo.exception.business.UnauthorizedResourceAccessException;
 import com.jeffssousa.fluxo.mapper.IncomeMapper;
 import com.jeffssousa.fluxo.repository.CategoryRepository;
 import com.jeffssousa.fluxo.repository.IncomeRepository;
@@ -16,6 +18,7 @@ import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -82,5 +85,24 @@ public class IncomeService {
                 .map(mapper::toDTO)
                 .toList();
 
+    }
+
+    public IncomeResponseDTO getById(UUID id) {
+
+        User user = userService.getAuthenticatedUser();
+
+        log.info("iniciando busca de income por id - user: {}", user.getEmail());
+
+        Income income = incomeRepository.findById(id)
+                .orElseThrow(() -> new TransactionNotFound("Income não encontrada!"));
+        UUID incomeUserId = income.getUser().getUserId();
+
+        if (!user.getUserId().equals(incomeUserId)){
+            throw new UnauthorizedResourceAccessException("Você não pode acessar essa transação");
+        }
+
+        log.info("Busca de receita por id realizada  com sucesso - user: {}",user.getEmail());
+
+        return mapper.toDTO(income);
     }
 }

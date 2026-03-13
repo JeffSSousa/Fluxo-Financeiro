@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("expense")
@@ -28,4 +29,12 @@ public class ExpenseController {
     public ResponseEntity<List<ExpenseResponseDTO>> getAll(){
         return ResponseEntity.ok(expenseService.getAll());
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ExpenseResponseDTO> getExpenseById(@PathVariable UUID id){
+        ExpenseResponseDTO dto = expenseService.getById(id);
+        return ResponseEntity.ok(dto);
+
+    }
+
 }

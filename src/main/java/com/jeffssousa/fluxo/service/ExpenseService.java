@@ -6,6 +6,8 @@ import com.jeffssousa.fluxo.entities.Category;
 import com.jeffssousa.fluxo.entities.Expense;
 import com.jeffssousa.fluxo.entities.User;
 import com.jeffssousa.fluxo.enums.CategoryType;
+import com.jeffssousa.fluxo.exception.business.TransactionNotFound;
+import com.jeffssousa.fluxo.exception.business.UnauthorizedResourceAccessException;
 import com.jeffssousa.fluxo.mapper.ExpenseMapper;
 import com.jeffssousa.fluxo.repository.CategoryRepository;
 import com.jeffssousa.fluxo.repository.ExpenseRepository;
@@ -15,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -78,5 +81,25 @@ public class ExpenseService {
                 .sorted((e1,e2) -> e1.getTransactionDate().compareTo(e2.getTransactionDate()))
                 .map(mapper::toDto)
                 .toList();
+    }
+
+    public ExpenseResponseDTO getById(UUID id) {
+
+        User user = userService.getAuthenticatedUser();
+
+        log.info("iniciando busca de expense por id - user: {}", user.getEmail());
+
+        Expense expense = expenseRepository.findById(id)
+                .orElseThrow(() -> new TransactionNotFound("Expense não encontrada!"));
+        UUID expenseUserId = expense.getUser().getUserId();
+
+        if (!user.getUserId().equals(expenseUserId)){
+            throw new UnauthorizedResourceAccessException("Você não pode acessar essa transação");
+        }
+
+        log.info("Busca de despesa por id realizada com sucesso - user: {}",user.getEmail());
+
+        return mapper.toDto(expense);
+
     }
 }
