@@ -1,6 +1,7 @@
 package com.jeffssousa.fluxo.service;
 
 import com.jeffssousa.fluxo.dto.IncomeRequestDTO;
+import com.jeffssousa.fluxo.dto.IncomeResponseDTO;
 import com.jeffssousa.fluxo.entities.Category;
 import com.jeffssousa.fluxo.entities.Income;
 import com.jeffssousa.fluxo.entities.User;
@@ -11,7 +12,10 @@ import com.jeffssousa.fluxo.repository.IncomeRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -63,4 +67,20 @@ public class IncomeService {
         return income;
     }
 
+    public List<IncomeResponseDTO> getAll() {
+
+        User user = userService.getAuthenticatedUser();
+
+        log.info("Iniciando busca de todos incomes - user: {}", user.getEmail());
+
+        List<Income> response = incomeRepository.findAllByUser(user);
+
+        log.info("Encontrado {} incomes - user: {}", response.size(), user.getEmail());
+
+        return response.stream()
+                .sorted((i1,i2) -> i1.getTransactionDate().compareTo(i2.getTransactionDate()))
+                .map(mapper::toDTO)
+                .toList();
+
+    }
 }
