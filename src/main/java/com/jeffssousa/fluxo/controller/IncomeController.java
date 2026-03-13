@@ -43,4 +43,10 @@ public class IncomeController {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<IncomeResponseDTO> updateById(@PathVariable UUID id, @RequestBody IncomeRequestDTO dto){
+        return ResponseEntity.ok(incomeService.updateById(id,dto));
+
+    }
+
 }

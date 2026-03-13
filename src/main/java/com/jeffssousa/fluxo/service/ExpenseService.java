@@ -121,4 +121,43 @@ public class ExpenseService {
         log.info("Despesa do ID: {} eliminada com sucesso - user: {}", user.getUserId(),user.getEmail());
 
     }
+
+    public ExpenseResponseDTO updateById(UUID id, ExpenseRequestDTO dto){
+
+        User user = userService.getAuthenticatedUser();
+        log.info("iniciando um update expense - user: {}", user.getEmail());
+
+        Expense expense = expenseRepository.findById(id)
+                .orElseThrow(() -> new TransactionNotFound("Despesa não encontrada!"));
+        UUID expenseUserId = expense.getUser().getUserId();
+
+        if (!user.getUserId().equals(expenseUserId)){
+            throw new UnauthorizedResourceAccessException("Você não pode acessar essa transação");
+        }
+
+        updateExpense(dto, expense);
+        expenseRepository.save(expense);
+
+        log.info("Despesa com ID: {} foi atualizado com sucesso - user: {}",expense.getExpenseId(),user.getEmail());
+
+        return mapper.toDto(expense);
+
+    }
+
+    private void updateExpense(ExpenseRequestDTO dto, Expense expense) {
+
+        if (dto.description() != null){
+            expense.setDescription(dto.description());
+        }
+        if (dto.amount() != null){
+            expense.setAmount(dto.amount());
+        }
+        if (dto.transactionDate() != null){
+            expense.setTransactionDate(dto.transactionDate());
+        }
+        // colocar enum para status pois ocorre
+        // implementar alteração de categoria
+
+    }
+
 }

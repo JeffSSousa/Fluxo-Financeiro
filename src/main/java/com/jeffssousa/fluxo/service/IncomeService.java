@@ -1,8 +1,10 @@
 package com.jeffssousa.fluxo.service;
 
+import com.jeffssousa.fluxo.dto.ExpenseRequestDTO;
 import com.jeffssousa.fluxo.dto.IncomeRequestDTO;
 import com.jeffssousa.fluxo.dto.IncomeResponseDTO;
 import com.jeffssousa.fluxo.entities.Category;
+import com.jeffssousa.fluxo.entities.Expense;
 import com.jeffssousa.fluxo.entities.Income;
 import com.jeffssousa.fluxo.entities.User;
 import com.jeffssousa.fluxo.enums.CategoryType;
@@ -123,5 +125,42 @@ public class IncomeService {
         incomeRepository.deleteById(income.getIncomeId());
         log.info("Receita do ID: {} eliminada com sucesso - user: {}", user.getUserId(),user.getEmail());
 
+    }
+
+    public IncomeResponseDTO updateById(UUID id, IncomeRequestDTO dto){
+
+        User user = userService.getAuthenticatedUser();
+        log.info("iniciando um update income - user: {}", user.getEmail());
+
+        Income income = incomeRepository.findById(id)
+                .orElseThrow(() -> new TransactionNotFound("Receita não encontrada!"));
+        UUID incomeUserId = income.getUser().getUserId();
+
+        if (!user.getUserId().equals(incomeUserId)){
+            throw new UnauthorizedResourceAccessException("Você não pode acessar essa transação");
+        }
+
+        updateIncome(dto, income);
+        incomeRepository.save(income);
+
+        log.info("Receita com ID: {} foi atualizado com sucesso - user: {}",income.getIncomeId(),user.getEmail());
+
+        return mapper.toDTO(income);
+
+    }
+
+    private void updateIncome(IncomeRequestDTO dto, Income income) {
+
+        if (dto.description() != null){
+            income.setDescription(dto.description());
+        }
+        if (dto.amount() != null){
+            income.setAmount(dto.amount());
+        }
+        if (dto.transactionDate() != null){
+            income.setTransactionDate(dto.transactionDate());
+        }
+        // colocar enum para status pois ocorre
+        // implementar alteração de categoria
     }
 }

@@ -43,4 +43,9 @@ public class ExpenseController {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ExpenseResponseDTO> updateById(@PathVariable UUID id, @RequestBody ExpenseRequestDTO dto){
+        return ResponseEntity.ok(expenseService.updateById(id,dto));
+    }
+
 }
