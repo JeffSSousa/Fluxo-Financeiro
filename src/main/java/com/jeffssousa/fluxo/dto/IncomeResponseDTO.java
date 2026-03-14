@@ -1,6 +1,7 @@
 package com.jeffssousa.fluxo.dto;
 
 import com.jeffssousa.fluxo.entities.Category;
+import com.jeffssousa.fluxo.enums.IncomeStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -11,6 +12,6 @@ public record IncomeResponseDTO(
         String description,
         BigDecimal amount,
         LocalDateTime transactionDate,
-        Boolean status
+        IncomeStatus status
 ) {
 }

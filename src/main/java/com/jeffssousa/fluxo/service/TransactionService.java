@@ -55,8 +55,7 @@ public class TransactionService {
                     income.getDescription(),
                     "RECEITA",
                     income.getAmount(),
-                    income.getTransactionDate(),
-                    income.isStatus()
+                    income.getTransactionDate()
             ));
         }
         return response;
@@ -70,8 +69,7 @@ public class TransactionService {
                     expense.getDescription(),
                     "DESPESA",
                     expense.getAmount(),
-                    expense.getTransactionDate(),
-                    expense.isStatus()
+                    expense.getTransactionDate()
             ));
         }
         return response;

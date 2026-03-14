@@ -1,5 +1,6 @@
 package com.jeffssousa.fluxo.entities;
 
+import com.jeffssousa.fluxo.enums.ExpenseStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,7 +27,7 @@ public class Expense {
     private String description;
     private BigDecimal amount;
     private LocalDateTime transactionDate;
-    private boolean status; // paid/ not paid
+    private ExpenseStatus status; // paid/ not paid
 
     @ManyToOne
     @JoinColumn(name = "category_id")

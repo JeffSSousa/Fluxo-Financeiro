@@ -155,7 +155,9 @@ public class ExpenseService {
         if (dto.transactionDate() != null){
             expense.setTransactionDate(dto.transactionDate());
         }
-        // colocar enum para status pois ocorre
+        if (dto.status() !=  null){
+            expense.setStatus(dto.status());
+        }
         // implementar alteração de categoria
 
     }

@@ -1,10 +1,8 @@
 package com.jeffssousa.fluxo.service;
 
-import com.jeffssousa.fluxo.dto.ExpenseRequestDTO;
 import com.jeffssousa.fluxo.dto.IncomeRequestDTO;
 import com.jeffssousa.fluxo.dto.IncomeResponseDTO;
 import com.jeffssousa.fluxo.entities.Category;
-import com.jeffssousa.fluxo.entities.Expense;
 import com.jeffssousa.fluxo.entities.Income;
 import com.jeffssousa.fluxo.entities.User;
 import com.jeffssousa.fluxo.enums.CategoryType;
@@ -160,7 +158,9 @@ public class IncomeService {
         if (dto.transactionDate() != null){
             income.setTransactionDate(dto.transactionDate());
         }
-        // colocar enum para status pois ocorre
+        if (dto.status() != null){
+            income.setStatus(dto.status());
+        }
         // implementar alteração de categoria
     }
 }

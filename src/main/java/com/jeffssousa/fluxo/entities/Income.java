@@ -1,5 +1,6 @@
 package com.jeffssousa.fluxo.entities;
 
+import com.jeffssousa.fluxo.enums.IncomeStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,7 +26,9 @@ public class Income {
     private String description;
     private BigDecimal amount;
     private LocalDateTime transactionDate;
-    private boolean status; // received/ not received
+
+    @Enumerated(EnumType.STRING)
+    private IncomeStatus status; // received/ not received
 
     @ManyToOne
     @JoinColumn(name = "category_id")
