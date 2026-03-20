@@ -3,6 +3,7 @@ package com.jeffssousa.fluxo.dto;
 import com.jeffssousa.fluxo.enums.ExpenseStatus;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -11,6 +12,7 @@ public record ExpenseResponseDTO (
     String description,
     BigDecimal amount,
     LocalDateTime transactionDate,
+    LocalDate dueDate,
     ExpenseStatus status
     ){
 }

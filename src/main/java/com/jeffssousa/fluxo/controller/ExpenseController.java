@@ -48,4 +48,10 @@ public class ExpenseController {
         return ResponseEntity.ok(expenseService.updateById(id,dto));
     }
 
+    @GetMapping("upcoming-expenses")
+    public ResponseEntity<List<ExpenseResponseDTO>> getUpcoming15Expenses(){
+        List<ExpenseResponseDTO> response = expenseService.getUpcoming15Expenses();
+        return ResponseEntity.ok(response);
+    }
+
 }

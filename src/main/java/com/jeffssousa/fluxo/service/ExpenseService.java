@@ -16,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -143,6 +145,29 @@ public class ExpenseService {
         return mapper.toDto(expense);
 
     }
+
+    public List<ExpenseResponseDTO> getUpcoming15Expenses(){
+
+        User user = userService.getAuthenticatedUser();
+        log.info("iniciando buscas das 15 ultimas despesas - user: {}", user.getEmail());
+
+        LocalDate now = LocalDate.now();
+        LocalDate next15Days = now.plusDays(15);
+
+        List<Expense> response = expenseRepository.findTop15ByUserAndDueDateBetweenOrderByDueDateAsc(
+                user,
+                now,
+                next15Days
+        );
+
+        log.info("Foram encontradas {} despesas proximas de vencimentos - user: {}", response.size(), user.getEmail());
+
+        return response.stream()
+                .map(mapper::toDto)
+                .toList();
+
+    }
+
 
     private void updateExpense(ExpenseRequestDTO dto, Expense expense) {
 

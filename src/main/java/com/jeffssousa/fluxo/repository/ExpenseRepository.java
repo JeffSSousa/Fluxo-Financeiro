@@ -8,6 +8,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,4 +24,10 @@ public interface ExpenseRepository extends JpaRepository<Expense, UUID> {
     BigDecimal sumByUser(@Param("user") User user);
 
     List<Expense> findAllByUser(User user);
+
+    List<Expense> findTop15ByUserAndDueDateBetweenOrderByDueDateAsc(
+            User user,
+            LocalDate start,
+            LocalDate end
+    );
 }
