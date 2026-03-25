@@ -1,10 +1,13 @@
 package com.jeffssousa.fluxo.service;
 
 
+import com.jeffssousa.fluxo.dto.AlterPasswordDTO;
 import com.jeffssousa.fluxo.dto.UserCreateDTO;
 import com.jeffssousa.fluxo.entities.User;
 import com.jeffssousa.fluxo.entities.UserProfile;
 import com.jeffssousa.fluxo.exception.business.EmailAlreadyExistsException;
+import com.jeffssousa.fluxo.exception.business.InvalidPasswordException;
+import com.jeffssousa.fluxo.exception.business.PasswordMismatchException;
 import com.jeffssousa.fluxo.mapper.UserProfileMapper;
 import com.jeffssousa.fluxo.repository.UserProfileRepository;
 import com.jeffssousa.fluxo.repository.UserRepository;
@@ -19,6 +22,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+
+    private final CurrentUserService userService;
 
     private final UserRepository userRepository;
 
@@ -58,6 +63,27 @@ public class UserService {
 
     public User getByEmail(String email) {
         return userRepository.findByEmail(email);
+
+    }
+
+    public String alterPassword(AlterPasswordDTO dto) {
+
+        User user = userService.getAuthenticatedUser();
+        log.info("Alterando senha - user: {}", user.getEmail());
+
+
+        if (!encoder.matches(dto.currentPassword(), user.getPassword())){
+            throw new InvalidPasswordException("Senha invalida!");
+        }
+
+        if (!dto.newPassword().equals(dto.confirmPassword())){
+            throw new PasswordMismatchException("As senhas não coincidem");
+        }
+
+        user.setPassword(encoder.encode(dto.newPassword()));
+        userRepository.save(user);
+        log.info("Senha alterada com sucesso - user: {}",user.getEmail());
+        return "Senha alterada com sucesso";
 
     }
 }
