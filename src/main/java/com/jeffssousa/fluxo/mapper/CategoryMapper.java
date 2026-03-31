@@ -1,6 +1,7 @@
 package com.jeffssousa.fluxo.mapper;
 
 import com.jeffssousa.fluxo.dto.CategoryRequestDTO;
+import com.jeffssousa.fluxo.dto.CategoryResponseDTO;
 import com.jeffssousa.fluxo.entities.Category;
 import org.mapstruct.Mapper;
 
@@ -8,5 +9,7 @@ import org.mapstruct.Mapper;
 public interface CategoryMapper {
 
     Category toEntity(CategoryRequestDTO dto);
+
+    CategoryResponseDTO toDto(Category category);
 
 }
