@@ -1,14 +1,22 @@
 package com.jeffssousa.fluxo.service;
 
 import com.jeffssousa.fluxo.dto.AccountSummaryDTO;
+import com.jeffssousa.fluxo.dto.MonthlySummaryDTO;
+import com.jeffssousa.fluxo.dto.YearlySummaryDTO;
 import com.jeffssousa.fluxo.entities.User;
 import com.jeffssousa.fluxo.repository.ExpenseRepository;
 import com.jeffssousa.fluxo.repository.IncomeRepository;
+import com.jeffssousa.fluxo.repository.projection.MonthlyAmountProjection;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.Month;
+import java.time.Year;
+import java.time.format.TextStyle;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -41,5 +49,54 @@ public class AccountSummaryService {
                 balance
         );
 
+    }
+
+    public YearlySummaryDTO getYearlyFinancialSummary(Integer year) {
+
+        int targetYear = Optional.ofNullable(year)
+                .orElse(Year.now().getValue());
+
+        User user = userService.getAuthenticatedUser();
+
+        List<MonthlyAmountProjection> incomes = incomeRepository.findMonthlyIncomes(user.getUserId(),year);
+        List<MonthlyAmountProjection> expenses = expenseRepository.findMonthlyExpenses(user.getUserId(),year);
+
+        Map<Integer, BigDecimal> incomesMap = convertToMap(incomes);
+        Map<Integer, BigDecimal> expensesMap = convertToMap(expenses);
+
+        List<MonthlySummaryDTO> months = new ArrayList<>();
+
+        for(int i = 1; i<=12; i++){
+
+            BigDecimal income = incomesMap.getOrDefault(i,BigDecimal.ZERO);
+            BigDecimal expense = expensesMap.getOrDefault(i,BigDecimal.ZERO);
+
+            BigDecimal balance = income.subtract(expense);
+
+            months.add(new MonthlySummaryDTO(
+                    convertMonth(i),
+                    income,
+                    expense,
+                    balance
+            ));
+
+        }
+
+        return new YearlySummaryDTO(targetYear, months);
+
+    }
+
+    private Map<Integer,BigDecimal> convertToMap(List<MonthlyAmountProjection> list){
+        return list.stream()
+                .collect(Collectors.toMap(
+                   MonthlyAmountProjection::getMes,
+                   MonthlyAmountProjection::getTotal
+                ));
+    }
+
+    private String convertMonth(int month) {
+        return Month.of(month)
+                .getDisplayName(TextStyle.FULL, new Locale("pt", "BR"))
+                .toUpperCase();
     }
 }

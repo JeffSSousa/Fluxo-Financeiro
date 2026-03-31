@@ -2,6 +2,7 @@ package com.jeffssousa.fluxo.repository;
 
 import com.jeffssousa.fluxo.entities.Expense;
 import com.jeffssousa.fluxo.entities.User;
+import com.jeffssousa.fluxo.repository.projection.MonthlyAmountProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -30,4 +31,16 @@ public interface ExpenseRepository extends JpaRepository<Expense, UUID> {
             LocalDate start,
             LocalDate end
     );
+
+    @Query(value = """
+    SELECT 
+        MONTH(e.transaction_date) AS mes,
+        COALESCE(SUM(e.amount), 0) AS total
+    FROM tb_expenses e
+    WHERE e.user_id = :userId
+      AND YEAR(e.transaction_date) = :year
+    GROUP BY MONTH(e.transaction_date)
+    ORDER BY mes
+    """, nativeQuery = true)
+    List<MonthlyAmountProjection> findMonthlyExpenses(UUID userId, Integer year);
 }
