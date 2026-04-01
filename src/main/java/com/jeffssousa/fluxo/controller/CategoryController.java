@@ -29,5 +29,21 @@ public class CategoryController {
     }
 
 
+    @GetMapping("/{id}")
+    public ResponseEntity<CategoryResponseDTO> getById(@PathVariable Long id){
+        return ResponseEntity.ok(service.getById(id));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable Long id){
+        service.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CategoryResponseDTO> updateById(@RequestBody CategoryRequestDTO dto, @PathVariable Long id){
+        return ResponseEntity.ok(service.updateById(dto,id));
+    }
+
 
 }
