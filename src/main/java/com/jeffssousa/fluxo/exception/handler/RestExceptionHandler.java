@@ -25,6 +25,8 @@ public class RestExceptionHandler {
         error.setMessage(e.getMessage());
         error.setPath(request.getRequestURI());
 
+        log.warn(e.getMessage());
+
         return ResponseEntity.status(status).body(error);
     }
 
@@ -38,7 +40,7 @@ public class RestExceptionHandler {
         error.setMessage(e.getMessage());
         error.setPath(request.getRequestURI());
 
-        log.warn("Acesso não permitido");
+        log.warn(e.getMessage());
 
         return ResponseEntity.status(status).body(error);
 
@@ -54,7 +56,7 @@ public class RestExceptionHandler {
         error.setMessage(e.getMessage());
         error.setPath(request.getRequestURI());
 
-        log.warn("Transação não encontrada");
+        log.warn(e.getMessage());
 
         return ResponseEntity.status(status).body(error);
 
@@ -70,7 +72,7 @@ public class RestExceptionHandler {
         error.setMessage(e.getMessage());
         error.setPath(request.getRequestURI());
 
-        log.warn("usuario inseriu uma senha invalida");
+        log.warn(e.getMessage());
 
         return ResponseEntity.status(status).body(error);
 
@@ -87,7 +89,7 @@ public class RestExceptionHandler {
         error.setMessage(e.getMessage());
         error.setPath(request.getRequestURI());
 
-        log.info("Senhas não coincidem");
+        log.info(e.getMessage());
 
         return ResponseEntity.status(status).body(error);
 

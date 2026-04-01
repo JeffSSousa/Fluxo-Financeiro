@@ -12,18 +12,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("account")
+@RequestMapping("summary")
 @RequiredArgsConstructor
 public class AccountSummaryController {
 
     private final AccountSummaryService service;
 
-    @GetMapping("/summary")
+    @GetMapping("/resume")
     public ResponseEntity<AccountSummaryDTO> getSummary(){
         return ResponseEntity.ok(service.getSummary());
     }
 
-    @GetMapping("year")
+    @GetMapping("/yearly")
     public ResponseEntity<YearlySummaryDTO> getYearlySummary(@RequestParam(required = false) Integer year){
         return ResponseEntity.ok(service.getYearlyFinancialSummary(year));
     }

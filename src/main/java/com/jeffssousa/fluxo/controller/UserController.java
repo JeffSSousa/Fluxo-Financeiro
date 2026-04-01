@@ -17,7 +17,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("profile")
+    @GetMapping("/profile")
     public ResponseEntity<ProfileResponseDTO> getProfile(){
         return ResponseEntity.ok(profileService.getProfile());
     }
