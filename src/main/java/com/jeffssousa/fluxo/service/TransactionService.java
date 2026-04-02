@@ -28,17 +28,23 @@ public class TransactionService {
 
         User user = userService.getAuthenticatedUser();
 
-        log.info("Ininicando busca de todas as transações - user: {}", user.getEmail());
+        log.info("[LIST] Transaction - user: {}", user.getEmail());
 
         List<Income> incomes = incomeRepository.findAllByUser(user);
-        log.info("encontrado {} receitas - user: {}",incomes.size(),user.getEmail());
         List<Expense> expenses = expenseRepository.findAllByUser(user);
-        log.info("encontrado {} receitas - user: {}",expenses.size(),user.getEmail());
 
         List<TransactionDTO> response = new ArrayList<>();
         response.addAll(convertIncomes(incomes));
         response.addAll(convertExpenses(expenses));
-        log.info("total de {} transações encontradas - user: {}", response.size(),user.getEmail());
+
+        log.info(
+                "[LIST RESULT] Transaction - user: {}, incomes: {}, expenses: {}, total: {}",
+                user.getEmail(),
+                incomes.size(),
+                expenses.size(),
+                response.size()
+        );
+
 
         return response.stream()
                 .sorted(

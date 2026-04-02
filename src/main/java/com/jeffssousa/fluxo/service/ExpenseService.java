@@ -37,11 +37,12 @@ public class ExpenseService {
     @Transactional
     public Expense addExpense(ExpenseRequestDTO dto) {
 
-        log.info("Iniciando criação de expense. Description={}, Amount={}",
+        User user = userService.getAuthenticatedUser();
+
+        log.info("[CREATE] Expense - user: {}, description: {}, amount: {}",
+                user.getEmail(),
                 dto.description(),
                 dto.amount());
-
-        User user = userService.getAuthenticatedUser();
 
         Category category = categoryRepository.findByNameAndUserUserId(dto.category(), user.getUserId())
                 .orElseGet(() -> new Category(
@@ -52,10 +53,11 @@ public class ExpenseService {
 
         if (category.getCategoryId() == null){
             category = categoryRepository.save(category);
-            log.info("categoria salva com sucesso. ID={}, Name={}, User={}",
+
+            log.info("[CREATE] Category (AUTO) - user: {}, categoryId: {}, name: {}",
+                    user.getEmail(),
                     category.getCategoryId(),
-                    category.getName(),
-                    category.getUser().getEmail());
+                    category.getName());
         }
 
         Expense expense = mapper.toEntity(dto);
@@ -64,9 +66,11 @@ public class ExpenseService {
 
         expense = expenseRepository.save(expense);
 
-        log.info("expense salvo com sucesso. ID={}, Amount={}",
+        log.info("[CREATE SUCCESS] Expense - user: {}, expenseId: {}, amount: {}, categoryId: {}",
+                user.getEmail(),
                 expense.getExpenseId(),
-                expense.getAmount());
+                expense.getAmount(),
+                category.getCategoryId());
 
         return expense;
     }
@@ -74,12 +78,12 @@ public class ExpenseService {
     public List<ExpenseResponseDTO> getAll() {
 
         User user = userService.getAuthenticatedUser();
-        log.info("Iniciando busca de todas as despesas - user: {}", user.getEmail());
+        log.info("[LIST] Expense - user: {}", user.getEmail());
 
-        List<Expense> list = expenseRepository.findAllByUser(user);
-        log.info("encontrado {} despesas - user: {}", list.size(),user.getEmail());
+        List<Expense> expenses = expenseRepository.findAllByUser(user);
+        log.info("[LIST RESULT] Expense - user: {}, total: {}", user.getEmail(), expenses.size());
 
-        return list.stream()
+        return expenses.stream()
                 .sorted((e1,e2) -> e1.getTransactionDate().compareTo(e2.getTransactionDate()))
                 .map(mapper::toDto)
                 .toList();
@@ -89,17 +93,22 @@ public class ExpenseService {
 
         User user = userService.getAuthenticatedUser();
 
-        log.info("iniciando busca de expense por id - user: {}", user.getEmail());
+        log.info("[READ] Expense - user: {}, expenseId: {}", user.getEmail(), id);
 
         Expense expense = expenseRepository.findById(id)
-                .orElseThrow(() -> new TransactionNotFound("Expense não encontrada!"));
+                .orElseThrow(() -> {
+                    log.warn("[READ] Expense NOT FOUND - user: {}, expenseId: {}", user.getEmail(), id);
+                    return new TransactionNotFound("Expense não encontrada!");
+                });
+
         UUID expenseUserId = expense.getUser().getUserId();
 
         if (!user.getUserId().equals(expenseUserId)){
+            log.warn("[READ] Expense UNAUTHORIZED - user: {}, expenseId: {}", user.getEmail(), id);
             throw new UnauthorizedResourceAccessException("Você não pode acessar essa transação");
         }
 
-        log.info("Busca de despesa por id realizada com sucesso - user: {}",user.getEmail());
+        log.info("[READ SUCCESS] Expense - user: {}, expenseId: {}", user.getEmail(), id);
 
         return mapper.toDto(expense);
 
@@ -109,38 +118,49 @@ public class ExpenseService {
 
         User user = userService.getAuthenticatedUser();
 
-        log.info("deletando despesa por ID - user: {}", user.getEmail());
+        log.info("[DELETE] Expense - user: {}, expenseId: {}", user.getEmail(), id);
 
         Expense expense = expenseRepository.findById(id)
-                .orElseThrow(() -> new TransactionNotFound("Expense não encontrada!"));
+                .orElseThrow(() -> {
+                    log.warn("[DELETE] Expense NOT FOUND - user: {}, expenseId: {}", user.getEmail(), id);
+                    return new TransactionNotFound("Expense não encontrada!");
+                });
+
         UUID expenseUserId = expense.getUser().getUserId();
 
         if (!user.getUserId().equals(expenseUserId)){
+            log.warn("[DELETE] Expense UNAUTHORIZED - user: {}, expenseId: {}", user.getEmail(), id);
             throw new UnauthorizedResourceAccessException("Você não pode acessar essa transação");
         }
 
         expenseRepository.deleteById(expense.getExpenseId());
-        log.info("Despesa do ID: {} eliminada com sucesso - user: {}", user.getUserId(),user.getEmail());
+        log.info("[DELETE SUCCESS] Expense - user: {}, expenseId: {}", user.getEmail(), id);
 
     }
 
     public ExpenseResponseDTO updateById(UUID id, ExpenseRequestDTO dto){
 
         User user = userService.getAuthenticatedUser();
-        log.info("iniciando um update expense - user: {}", user.getEmail());
+
+        log.info("[UPDATE] Expense - user: {}, expenseId: {}", user.getEmail(), id);
 
         Expense expense = expenseRepository.findById(id)
-                .orElseThrow(() -> new TransactionNotFound("Despesa não encontrada!"));
+                .orElseThrow(() -> {
+                    log.warn("[UPDATE] Expense NOT FOUND - user: {}, expenseId: {}", user.getEmail(), id);
+                    return new TransactionNotFound("Despesa não encontrada!");
+                });
+
         UUID expenseUserId = expense.getUser().getUserId();
 
         if (!user.getUserId().equals(expenseUserId)){
+            log.warn("[UPDATE] Expense UNAUTHORIZED - user: {}, expenseId: {}", user.getEmail(), id);
             throw new UnauthorizedResourceAccessException("Você não pode acessar essa transação");
         }
 
         updateExpense(dto, expense);
         expenseRepository.save(expense);
 
-        log.info("Despesa com ID: {} foi atualizado com sucesso - user: {}",expense.getExpenseId(),user.getEmail());
+        log.info("[UPDATE SUCCESS] Expense - user: {}, expenseId: {}", user.getEmail(), id);
 
         return mapper.toDto(expense);
 
@@ -149,10 +169,12 @@ public class ExpenseService {
     public List<ExpenseResponseDTO> getUpcoming15Expenses(){
 
         User user = userService.getAuthenticatedUser();
-        log.info("iniciando buscas das 15 ultimas despesas - user: {}", user.getEmail());
 
         LocalDate now = LocalDate.now();
         LocalDate next15Days = now.plusDays(15);
+
+        log.info("[LIST] Expense UPCOMING - user: {}, from: {}, to: {}",
+                user.getEmail(), now, next15Days);
 
         List<Expense> response = expenseRepository.findTop15ByUserAndDueDateBetweenOrderByDueDateAsc(
                 user,
@@ -160,7 +182,8 @@ public class ExpenseService {
                 next15Days
         );
 
-        log.info("Foram encontradas {} despesas proximas de vencimentos - user: {}", response.size(), user.getEmail());
+        log.info("[LIST RESULT] Expense UPCOMING - user: {}, total: {}",
+                user.getEmail(), response.size());
 
         return response.stream()
                 .map(mapper::toDto)

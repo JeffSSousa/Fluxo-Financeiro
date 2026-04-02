@@ -33,6 +33,8 @@ public class AccountSummaryService {
 
         User user = userService.getAuthenticatedUser();
 
+        log.info("[READ] Account Summary - user: {}", user.getEmail());
+
         BigDecimal totalIncomes = incomeRepository.sumByUser(user);
         BigDecimal totalExpenses = expenseRepository.sumByUser(user);
 
@@ -41,7 +43,13 @@ public class AccountSummaryService {
 
         BigDecimal balance = totalIncomes.subtract(totalExpenses);
 
-        log.info("Busca de summary - usuario: {} ",  user.getEmail());
+        log.info(
+                "[READ RESULT] Account Summary - user: {}, incomes: {}, expenses: {}, balance: {}",
+                user.getEmail(),
+                totalIncomes,
+                totalExpenses,
+                balance
+        );
 
         return new AccountSummaryDTO(
                 totalIncomes,
@@ -57,6 +65,8 @@ public class AccountSummaryService {
                 .orElse(Year.now().getValue());
 
         User user = userService.getAuthenticatedUser();
+
+        log.info("[READ] Yearly Summary - user: {}, year: {}", user.getEmail(), targetYear);
 
         List<MonthlyAmountProjection> incomes = incomeRepository.findMonthlyIncomes(user.getUserId(),year);
         List<MonthlyAmountProjection> expenses = expenseRepository.findMonthlyExpenses(user.getUserId(),year);
@@ -81,6 +91,11 @@ public class AccountSummaryService {
             ));
 
         }
+
+        log.info("[READ RESULT] Yearly Summary - user: {}, year: {}, months: {}",
+                user.getEmail(),
+                targetYear,
+                months.size());
 
         return new YearlySummaryDTO(targetYear, months);
 

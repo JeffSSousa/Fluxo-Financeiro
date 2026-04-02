@@ -35,11 +35,13 @@ public class IncomeService {
     @Transactional
     public Income addIncome(IncomeRequestDTO dto){
 
-        log.info("Iniciando criação de Income. Description={}, Amount={}",
+        User user = userService.getAuthenticatedUser();
+
+        log.info("[CREATE] Income - user: {}, description: {}, amount: {}",
+                user.getEmail(),
                 dto.description(),
                 dto.amount());
 
-        User user = userService.getAuthenticatedUser();
 
         Category category = categoryRepository.findByName(dto.category())
                 .orElseGet(() -> new Category(
@@ -50,10 +52,12 @@ public class IncomeService {
 
         if (category.getCategoryId() == null){
             category = categoryRepository.save(category);
-            log.info("categoria salva com sucesso. ID={}, Name={}, User={}",
+
+            log.info("[CREATE] Category (AUTO) - user: {}, categoryId: {}, name: {}",
+                    user.getEmail(),
                     category.getCategoryId(),
-                    category.getName(),
-                    category.getUser().getEmail());
+                    category.getName());
+
         }
 
         Income income = mapper.toEntity(dto);
@@ -62,9 +66,11 @@ public class IncomeService {
 
         income = incomeRepository.save(income);
 
-        log.info("Income salvo com sucesso. ID={}, Amount={}",
+        log.info("[CREATE SUCCESS] Income - user: {}, incomeId: {}, amount: {}, categoryId: {}",
+                user.getEmail(),
                 income.getIncomeId(),
-                income.getAmount());
+                income.getAmount(),
+                category.getCategoryId());
 
         return income;
     }
@@ -73,11 +79,11 @@ public class IncomeService {
 
         User user = userService.getAuthenticatedUser();
 
-        log.info("Iniciando busca de todos incomes - user: {}", user.getEmail());
+        log.info("[LIST] Income - user: {}", user.getEmail());
 
         List<Income> response = incomeRepository.findAllByUser(user);
 
-        log.info("Encontrado {} incomes - user: {}", response.size(), user.getEmail());
+        log.info("[LIST RESULT] Income - user: {}, total: {}", user.getEmail(), response.size());
 
         return response.stream()
                 .sorted((i1,i2) -> i1.getTransactionDate().compareTo(i2.getTransactionDate()))
@@ -90,17 +96,22 @@ public class IncomeService {
 
         User user = userService.getAuthenticatedUser();
 
-        log.info("iniciando busca de income por id - user: {}", user.getEmail());
+        log.info("[READ] Income - user: {}, incomeId: {}", user.getEmail(), id);
 
         Income income = incomeRepository.findById(id)
-                .orElseThrow(() -> new TransactionNotFound("Income não encontrada!"));
+                .orElseThrow(() -> {
+                    log.warn("[READ] Income NOT FOUND - user: {}, incomeId: {}", user.getEmail(), id);
+                    return new TransactionNotFound("Income não encontrada!");
+                });
+
         UUID incomeUserId = income.getUser().getUserId();
 
         if (!user.getUserId().equals(incomeUserId)){
+            log.warn("[READ] Income UNAUTHORIZED - user: {}, incomeId: {}", user.getEmail(), id);
             throw new UnauthorizedResourceAccessException("Você não pode acessar essa transação");
         }
 
-        log.info("Busca de receita por id realizada  com sucesso - user: {}",user.getEmail());
+        log.info("[READ SUCCESS] Income - user: {}, incomeId: {}", user.getEmail(), id);
 
         return mapper.toDTO(income);
     }
@@ -109,39 +120,49 @@ public class IncomeService {
 
         User user = userService.getAuthenticatedUser();
 
-        log.info("deletando receita por ID - user: {}", user.getEmail());
+        log.info("[DELETE] Income - user: {}, incomeId: {}", user.getEmail(), id);
 
 
         Income income = incomeRepository.findById(id)
-                .orElseThrow(() -> new TransactionNotFound("Expense não encontrada!"));
+                .orElseThrow(() -> {
+                    log.warn("[DELETE] Income NOT FOUND - user: {}, incomeId: {}", user.getEmail(), id);
+                    return new TransactionNotFound("Income não encontrada!");
+                });
+
         UUID incomeUserId = income.getUser().getUserId();
 
         if (!user.getUserId().equals(incomeUserId)){
+            log.warn("[DELETE] Income UNAUTHORIZED - user: {}, incomeId: {}", user.getEmail(), id);
             throw new UnauthorizedResourceAccessException("Você não pode acessar essa transação");
         }
 
         incomeRepository.deleteById(income.getIncomeId());
-        log.info("Receita do ID: {} eliminada com sucesso - user: {}", user.getUserId(),user.getEmail());
+        log.info("[DELETE SUCCESS] Income - user: {}, incomeId: {}", user.getEmail(), id);
 
     }
 
     public IncomeResponseDTO updateById(UUID id, IncomeRequestDTO dto){
 
         User user = userService.getAuthenticatedUser();
-        log.info("iniciando um update income - user: {}", user.getEmail());
+        log.info("[UPDATE] Income - user: {}, incomeId: {}", user.getEmail(), id);
 
         Income income = incomeRepository.findById(id)
-                .orElseThrow(() -> new TransactionNotFound("Receita não encontrada!"));
+                .orElseThrow(() -> {
+                    log.warn("[UPDATE] Income NOT FOUND - user: {}, incomeId: {}", user.getEmail(), id);
+                    return new TransactionNotFound("Receita não encontrada!");
+                });
+
         UUID incomeUserId = income.getUser().getUserId();
 
         if (!user.getUserId().equals(incomeUserId)){
+            log.warn("[UPDATE] Income UNAUTHORIZED - user: {}, incomeId: {}", user.getEmail(), id);
             throw new UnauthorizedResourceAccessException("Você não pode acessar essa transação");
         }
 
         updateIncome(dto, income);
         incomeRepository.save(income);
 
-        log.info("Receita com ID: {} foi atualizado com sucesso - user: {}",income.getIncomeId(),user.getEmail());
+        log.info("[UPDATE SUCCESS] Income - user: {}, incomeId: {}", user.getEmail(), id);
 
         return mapper.toDTO(income);
 

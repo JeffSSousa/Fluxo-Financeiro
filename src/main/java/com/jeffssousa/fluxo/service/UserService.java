@@ -35,11 +35,11 @@ public class UserService {
 
     public void register(UserCreateDTO dto){
 
-        log.info("Criando novo usuario");
+        log.info("[CREATE] User - email: {}", dto.email());
 
         if (userRepository.findByEmail(dto.email()) != null){
             String msg = "Este e-mail já está vinculado a uma conta";
-            log.warn("{} | {}", msg, dto.email());
+            log.warn("[CREATE] User DUPLICATED - email: {}", dto.email());
             throw new EmailAlreadyExistsException(msg);
         }
 
@@ -50,7 +50,7 @@ public class UserService {
         userProfile.setUser(user);
         profileRepository.save(userProfile);
 
-        log.info("Usuario criado com sucesso");
+        log.info("[CREATE SUCCESS] User - email: {}, userId: {}", dto.email(), user.getUserId());
     }
 
     private User createUserAdmin(UserCreateDTO dto){
@@ -69,20 +69,22 @@ public class UserService {
     public String alterPassword(AlterPasswordDTO dto) {
 
         User user = userService.getAuthenticatedUser();
-        log.info("Alterando senha - user: {}", user.getEmail());
+        log.info("[UPDATE] Password - user: {}", user.getEmail());
 
 
         if (!encoder.matches(dto.currentPassword(), user.getPassword())){
+            log.warn("[UPDATE] Password INVALID CURRENT - user: {}", user.getEmail());
             throw new InvalidPasswordException("Senha invalida!");
         }
 
         if (!dto.newPassword().equals(dto.confirmPassword())){
+            log.warn("[UPDATE] Password MISMATCH - user: {}", user.getEmail());
             throw new PasswordMismatchException("As senhas não coincidem");
         }
 
         user.setPassword(encoder.encode(dto.newPassword()));
         userRepository.save(user);
-        log.info("Senha alterada com sucesso - user: {}",user.getEmail());
+        log.info("[UPDATE SUCCESS] Password - user: {}", user.getEmail());
         return "Senha alterada com sucesso";
 
     }
