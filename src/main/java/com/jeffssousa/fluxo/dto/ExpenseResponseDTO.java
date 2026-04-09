@@ -1,5 +1,6 @@
 package com.jeffssousa.fluxo.dto;
 
+import com.jeffssousa.fluxo.entities.Category;
 import com.jeffssousa.fluxo.enums.ExpenseStatus;
 
 import java.math.BigDecimal;
@@ -13,6 +14,7 @@ public record ExpenseResponseDTO (
     BigDecimal amount,
     LocalDateTime transactionDate,
     LocalDate dueDate,
-    ExpenseStatus status
+    ExpenseStatus status,
+    CategoryResponseDTO category
     ){
 }

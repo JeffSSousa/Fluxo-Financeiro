@@ -43,25 +43,8 @@ public class IncomeService {
                 dto.amount());
 
 
-        Category category = categoryRepository.findByName(dto.category())
-                .orElseGet(() -> new Category(
-                        dto.category(),
-                        CategoryType.INCOME,
-                        user
-                        ));
-
-        if (category.getCategoryId() == null){
-            category = categoryRepository.save(category);
-
-            log.info("[CREATE] Category (AUTO) - user: {}, categoryId: {}, name: {}",
-                    user.getEmail(),
-                    category.getCategoryId(),
-                    category.getName());
-
-        }
-
         Income income = mapper.toEntity(dto);
-        income.setCategory(category);
+        Category category = findOrCreateCategory(dto.category(), income);
         income.setUser(user);
 
         income = incomeRepository.save(income);
@@ -182,6 +165,33 @@ public class IncomeService {
         if (dto.status() != null){
             income.setStatus(dto.status());
         }
-        // implementar alteração de categoria
+        if (dto.category() != null){
+            findOrCreateCategory(dto.category(), income);
+        }
     }
+
+    private Category findOrCreateCategory(String name, Income income){
+
+        User user = userService.getAuthenticatedUser();
+
+        Category category = categoryRepository.findByNameAndUserUserId(name, user.getUserId())
+                .orElseGet(() -> new Category(
+                        name,
+                        CategoryType.INCOME,
+                        user
+                ));
+
+        if (category.getCategoryId() == null){
+            category = categoryRepository.save(category);
+
+            log.info("[CREATE] Category (AUTO) - user: {}, categoryId: {}, name: {}",
+                    user.getEmail(),
+                    category.getCategoryId(),
+                    category.getName());
+        }
+
+        income.setCategory(category);
+        return category;
+    }
+
 }

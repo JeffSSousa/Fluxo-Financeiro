@@ -44,24 +44,8 @@ public class ExpenseService {
                 dto.description(),
                 dto.amount());
 
-        Category category = categoryRepository.findByNameAndUserUserId(dto.category(), user.getUserId())
-                .orElseGet(() -> new Category(
-                        dto.category(),
-                        CategoryType.EXPENSE,
-                        user
-                        ));
-
-        if (category.getCategoryId() == null){
-            category = categoryRepository.save(category);
-
-            log.info("[CREATE] Category (AUTO) - user: {}, categoryId: {}, name: {}",
-                    user.getEmail(),
-                    category.getCategoryId(),
-                    category.getName());
-        }
-
         Expense expense = mapper.toEntity(dto);
-        expense.setCategory(category);
+        Category category = findOrCreateCategory(dto.category(),expense);
         expense.setUser(user);
 
         expense = expenseRepository.save(expense);
@@ -206,7 +190,34 @@ public class ExpenseService {
         if (dto.status() !=  null){
             expense.setStatus(dto.status());
         }
-        // implementar alteração de categoria
+        if (dto.category() != null){
+           findOrCreateCategory(dto.category(), expense);
+        }
+
+    }
+
+    private Category findOrCreateCategory(String name, Expense expense){
+
+        User user = userService.getAuthenticatedUser();
+
+        Category category = categoryRepository.findByNameAndUserUserId(name, user.getUserId())
+                .orElseGet(() -> new Category(
+                        name,
+                        CategoryType.EXPENSE,
+                        user
+                ));
+
+        if (category.getCategoryId() == null){
+            category = categoryRepository.save(category);
+
+            log.info("[CREATE] Category (AUTO) - user: {}, categoryId: {}, name: {}",
+                    user.getEmail(),
+                    category.getCategoryId(),
+                    category.getName());
+        }
+
+        expense.setCategory(category);
+        return category;
 
     }
 

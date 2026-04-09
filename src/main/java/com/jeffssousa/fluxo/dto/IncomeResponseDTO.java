@@ -12,6 +12,7 @@ public record IncomeResponseDTO(
         String description,
         BigDecimal amount,
         LocalDateTime transactionDate,
-        IncomeStatus status
+        IncomeStatus status,
+        CategoryResponseDTO category
 ) {
 }
