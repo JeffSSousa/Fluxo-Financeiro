@@ -4,6 +4,7 @@ import com.jeffssousa.fluxo.dto.user.AlterPasswordDTO;
 import com.jeffssousa.fluxo.dto.user.ProfileResponseDTO;
 import com.jeffssousa.fluxo.service.UserProfileService;
 import com.jeffssousa.fluxo.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class UserController {
     }
 
     @PutMapping("/password")
-    public ResponseEntity<String> alterPassword(@RequestBody AlterPasswordDTO dto){
+    public ResponseEntity<String> alterPassword(@Valid @RequestBody AlterPasswordDTO dto){
         String response = userService.alterPassword(dto);
         return ResponseEntity.ok(response);
     }

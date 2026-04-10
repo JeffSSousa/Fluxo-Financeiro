@@ -4,6 +4,7 @@ package com.jeffssousa.fluxo.controller;
 import com.jeffssousa.fluxo.dto.expense.ExpenseRequestDTO;
 import com.jeffssousa.fluxo.dto.expense.ExpenseResponseDTO;
 import com.jeffssousa.fluxo.service.ExpenseService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class ExpenseController {
     private final ExpenseService expenseService;
 
     @PostMapping
-    public ResponseEntity<Void> addExpense(@RequestBody ExpenseRequestDTO dto){
+    public ResponseEntity<Void> addExpense(@Valid @RequestBody ExpenseRequestDTO dto){
         expenseService.addExpense(dto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

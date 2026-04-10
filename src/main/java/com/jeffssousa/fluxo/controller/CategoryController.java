@@ -3,6 +3,7 @@ package com.jeffssousa.fluxo.controller;
 import com.jeffssousa.fluxo.dto.category.CategoryRequestDTO;
 import com.jeffssousa.fluxo.dto.category.CategoryResponseDTO;
 import com.jeffssousa.fluxo.service.CategoryService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class CategoryController {
     private final CategoryService service;
 
     @PostMapping
-    public ResponseEntity<Void> createCategory(@RequestBody CategoryRequestDTO dto){
+    public ResponseEntity<Void> createCategory(@Valid @RequestBody CategoryRequestDTO dto){
         service.createCategory(dto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

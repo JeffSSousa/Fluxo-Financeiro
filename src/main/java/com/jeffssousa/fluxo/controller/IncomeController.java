@@ -3,6 +3,7 @@ package com.jeffssousa.fluxo.controller;
 import com.jeffssousa.fluxo.dto.income.IncomeRequestDTO;
 import com.jeffssousa.fluxo.dto.income.IncomeResponseDTO;
 import com.jeffssousa.fluxo.service.IncomeService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class IncomeController {
     private final IncomeService incomeService;
 
     @PostMapping
-    public ResponseEntity<Void> addIncome(@RequestBody IncomeRequestDTO dto){
+    public ResponseEntity<Void> addIncome(@Valid @RequestBody IncomeRequestDTO dto){
         incomeService.addIncome(dto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
