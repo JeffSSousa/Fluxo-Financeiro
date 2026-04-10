@@ -1,6 +1,4 @@
-package com.jeffssousa.fluxo.dto;
-
-import com.jeffssousa.fluxo.enums.IncomeStatus;
+package com.jeffssousa.fluxo.dto.transaction;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

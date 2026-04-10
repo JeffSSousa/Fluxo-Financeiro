@@ -1,8 +1,8 @@
 package com.jeffssousa.fluxo.controller;
 
 
-import com.jeffssousa.fluxo.dto.ExpenseRequestDTO;
-import com.jeffssousa.fluxo.dto.ExpenseResponseDTO;
+import com.jeffssousa.fluxo.dto.expense.ExpenseRequestDTO;
+import com.jeffssousa.fluxo.dto.expense.ExpenseResponseDTO;
 import com.jeffssousa.fluxo.service.ExpenseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

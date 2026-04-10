@@ -1,6 +1,6 @@
 package com.jeffssousa.fluxo.controller;
 
-import com.jeffssousa.fluxo.dto.UserCreateDTO;
+import com.jeffssousa.fluxo.dto.user.UserCreateDTO;
 import com.jeffssousa.fluxo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

@@ -1,8 +1,8 @@
 package com.jeffssousa.fluxo.service;
 
 
-import com.jeffssousa.fluxo.dto.AlterPasswordDTO;
-import com.jeffssousa.fluxo.dto.UserCreateDTO;
+import com.jeffssousa.fluxo.dto.user.AlterPasswordDTO;
+import com.jeffssousa.fluxo.dto.user.UserCreateDTO;
 import com.jeffssousa.fluxo.entities.User;
 import com.jeffssousa.fluxo.entities.UserProfile;
 import com.jeffssousa.fluxo.exception.business.EmailAlreadyExistsException;

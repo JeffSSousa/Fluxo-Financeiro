@@ -1,6 +1,6 @@
 package com.jeffssousa.fluxo.controller;
 
-import com.jeffssousa.fluxo.dto.TransactionDTO;
+import com.jeffssousa.fluxo.dto.transaction.TransactionDTO;
 import com.jeffssousa.fluxo.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -1,7 +1,7 @@
 package com.jeffssousa.fluxo.mapper;
 
-import com.jeffssousa.fluxo.dto.ProfileResponseDTO;
-import com.jeffssousa.fluxo.dto.UserCreateDTO;
+import com.jeffssousa.fluxo.dto.user.ProfileResponseDTO;
+import com.jeffssousa.fluxo.dto.user.UserCreateDTO;
 import com.jeffssousa.fluxo.entities.UserProfile;
 import org.mapstruct.Mapper;
 

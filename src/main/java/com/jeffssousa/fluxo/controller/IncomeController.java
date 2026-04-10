@@ -1,7 +1,7 @@
 package com.jeffssousa.fluxo.controller;
 
-import com.jeffssousa.fluxo.dto.IncomeRequestDTO;
-import com.jeffssousa.fluxo.dto.IncomeResponseDTO;
+import com.jeffssousa.fluxo.dto.income.IncomeRequestDTO;
+import com.jeffssousa.fluxo.dto.income.IncomeResponseDTO;
 import com.jeffssousa.fluxo.service.IncomeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

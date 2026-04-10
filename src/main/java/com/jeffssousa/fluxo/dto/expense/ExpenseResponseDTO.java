@@ -1,6 +1,6 @@
-package com.jeffssousa.fluxo.dto;
+package com.jeffssousa.fluxo.dto.expense;
 
-import com.jeffssousa.fluxo.entities.Category;
+import com.jeffssousa.fluxo.dto.category.CategoryResponseDTO;
 import com.jeffssousa.fluxo.enums.ExpenseStatus;
 
 import java.math.BigDecimal;

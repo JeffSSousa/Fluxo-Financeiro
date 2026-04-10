@@ -1,7 +1,7 @@
 package com.jeffssousa.fluxo.controller;
 
-import com.jeffssousa.fluxo.dto.AlterPasswordDTO;
-import com.jeffssousa.fluxo.dto.ProfileResponseDTO;
+import com.jeffssousa.fluxo.dto.user.AlterPasswordDTO;
+import com.jeffssousa.fluxo.dto.user.ProfileResponseDTO;
 import com.jeffssousa.fluxo.service.UserProfileService;
 import com.jeffssousa.fluxo.service.UserService;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.jeffssousa.fluxo.dto;
+package com.jeffssousa.fluxo.dto.summary;
 
 import java.util.List;
 

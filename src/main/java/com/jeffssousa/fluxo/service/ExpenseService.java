@@ -1,7 +1,7 @@
 package com.jeffssousa.fluxo.service;
 
-import com.jeffssousa.fluxo.dto.ExpenseRequestDTO;
-import com.jeffssousa.fluxo.dto.ExpenseResponseDTO;
+import com.jeffssousa.fluxo.dto.expense.ExpenseRequestDTO;
+import com.jeffssousa.fluxo.dto.expense.ExpenseResponseDTO;
 import com.jeffssousa.fluxo.entities.Category;
 import com.jeffssousa.fluxo.entities.Expense;
 import com.jeffssousa.fluxo.entities.User;
@@ -17,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 

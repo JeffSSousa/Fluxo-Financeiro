@@ -1,4 +1,4 @@
-package com.jeffssousa.fluxo.dto;
+package com.jeffssousa.fluxo.dto.expense;
 
 import com.jeffssousa.fluxo.enums.ExpenseStatus;
 

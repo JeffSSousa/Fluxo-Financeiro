@@ -1,8 +1,8 @@
 package com.jeffssousa.fluxo.service;
 
-import com.jeffssousa.fluxo.dto.AccountSummaryDTO;
-import com.jeffssousa.fluxo.dto.MonthlySummaryDTO;
-import com.jeffssousa.fluxo.dto.YearlySummaryDTO;
+import com.jeffssousa.fluxo.dto.summary.AccountSummaryDTO;
+import com.jeffssousa.fluxo.dto.summary.MonthlySummaryDTO;
+import com.jeffssousa.fluxo.dto.summary.YearlySummaryDTO;
 import com.jeffssousa.fluxo.entities.User;
 import com.jeffssousa.fluxo.repository.ExpenseRepository;
 import com.jeffssousa.fluxo.repository.IncomeRepository;

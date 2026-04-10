@@ -1,6 +1,6 @@
 package com.jeffssousa.fluxo.service;
 
-import com.jeffssousa.fluxo.dto.TransactionDTO;
+import com.jeffssousa.fluxo.dto.transaction.TransactionDTO;
 import com.jeffssousa.fluxo.entities.Expense;
 import com.jeffssousa.fluxo.entities.Income;
 import com.jeffssousa.fluxo.entities.User;

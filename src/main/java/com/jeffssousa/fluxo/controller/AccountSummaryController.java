@@ -1,7 +1,7 @@
 package com.jeffssousa.fluxo.controller;
 
-import com.jeffssousa.fluxo.dto.AccountSummaryDTO;
-import com.jeffssousa.fluxo.dto.YearlySummaryDTO;
+import com.jeffssousa.fluxo.dto.summary.AccountSummaryDTO;
+import com.jeffssousa.fluxo.dto.summary.YearlySummaryDTO;
 import com.jeffssousa.fluxo.service.AccountSummaryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,6 @@
 package com.jeffssousa.fluxo.service;
 
-import com.jeffssousa.fluxo.dto.ProfileResponseDTO;
+import com.jeffssousa.fluxo.dto.user.ProfileResponseDTO;
 import com.jeffssousa.fluxo.entities.User;
 import com.jeffssousa.fluxo.entities.UserProfile;
 import com.jeffssousa.fluxo.mapper.UserProfileMapper;

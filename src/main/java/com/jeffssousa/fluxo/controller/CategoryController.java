@@ -1,7 +1,7 @@
 package com.jeffssousa.fluxo.controller;
 
-import com.jeffssousa.fluxo.dto.CategoryRequestDTO;
-import com.jeffssousa.fluxo.dto.CategoryResponseDTO;
+import com.jeffssousa.fluxo.dto.category.CategoryRequestDTO;
+import com.jeffssousa.fluxo.dto.category.CategoryResponseDTO;
 import com.jeffssousa.fluxo.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
