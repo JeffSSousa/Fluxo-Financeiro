@@ -43,7 +43,7 @@ public class UserService {
             throw new EmailAlreadyExistsException(msg);
         }
 
-        User user = createUserAdmin(dto);
+        User user = createUser(dto);
         userRepository.save(user);
 
         UserProfile userProfile = mapper.toEntity(dto);
@@ -53,11 +53,11 @@ public class UserService {
         log.info("[CREATE SUCCESS] User - email: {}, userId: {}", dto.email(), user.getUserId());
     }
 
-    private User createUserAdmin(UserCreateDTO dto){
+    private User createUser(UserCreateDTO dto){
         User user = new User();
         user.setEmail(dto.email());
         user.setPassword(encoder.encode(dto.password()));
-        user.setRoles(List.of("ADMIN"));
+        user.setRoles(List.of("USER"));
         return user;
     }
 
