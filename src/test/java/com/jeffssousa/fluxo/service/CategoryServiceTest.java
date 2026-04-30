@@ -15,6 +15,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -40,6 +42,9 @@ public class CategoryServiceTest {
 
     @Mock
     private CategoryMapper mapper;
+
+    @Captor
+    private ArgumentCaptor<Category> categoryCaptor;
 
     @InjectMocks
     private CategoryService service;
@@ -236,6 +241,60 @@ public class CategoryServiceTest {
             verify(categoryRepository, times(1)).delete(any(Category.class));
 
         }
+
+        @Test
+        @DisplayName("Deve lançar exceção quando não encontrar a categoria para deletar")
+        void shouldThrowExceptionWhenCategoryNotFound(){
+
+            User user = UserTestBuilder.aUser().build();
+            Long id = 1L;
+
+            when(userService.getAuthenticatedUser()).thenReturn(user);
+            when(categoryRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+            EntityNotFoundException e = assertThrows(
+                    EntityNotFoundException.class,
+                    () -> service.deleteById(id)
+            );
+
+            verify(userService, times(1)).getAuthenticatedUser();
+            verify(categoryRepository, times(1)).findById(anyLong());
+
+            assertEquals("Categoria não encontrada!", e.getMessage());
+        }
+
+        @Test
+        @DisplayName("Deve lançar exceção ao tentar deletar categoria de outro usuário")
+        void shouldThrowExceptionWhenDeletingCategoryFromAnotherUser(){
+
+            User user = UserTestBuilder.aUser()
+                    .withUserId(UUID.randomUUID())
+                    .build();
+
+            User categoryUser = UserTestBuilder.aUser()
+                    .withUserId(UUID.randomUUID())
+                    .build();
+
+            Long id = 1L;
+
+            Category category = CategoryTestBuilder.aCategory()
+                    .withCategoryId(id)
+                    .withUser(categoryUser)
+                    .build();
+
+            when(userService.getAuthenticatedUser()).thenReturn(user);
+            when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
+
+            UnauthorizedResourceAccessException e = assertThrows(
+                    UnauthorizedResourceAccessException.class,
+                    () -> service.deleteById(id)
+            );
+
+            verify(userService, times(1)).getAuthenticatedUser();
+            verify(categoryRepository, times(1)).findById(anyLong());
+
+            assertEquals("Você não pode acessar essa categoria", e.getMessage());
+        }
     }
 
     @Nested
@@ -266,8 +325,74 @@ public class CategoryServiceTest {
 
             CategoryResponseDTO response = service.updateById(dto, id);
 
+            verify(userService, times(1)).getAuthenticatedUser();
+            verify(categoryRepository, times(1)).findById(anyLong());
+            verify(categoryRepository, times(1)).save(categoryCaptor.capture());
+
+            Category captured = categoryCaptor.getValue();
+
+            assertEquals(dto.name(), captured.getName());
+            assertEquals(dto.type(), captured.getType());
             assertEquals(dto.name(), response.name());
             assertEquals(dto.type(), response.type());
+        }
+
+        @Test
+        @DisplayName("Deve lançar exceção quando não encontrar a categoria para atualizar")
+        void shouldThrowExceptionWhenCategoryNotFound(){
+
+            User user = UserTestBuilder.aUser().build();
+            Long id = 1L;
+
+            CategoryRequestDTO dto = new CategoryRequestDTO("House", CategoryType.EXPENSE);
+
+            when(userService.getAuthenticatedUser()).thenReturn(user);
+            when(categoryRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+            EntityNotFoundException e = assertThrows(
+                    EntityNotFoundException.class,
+                    () -> service.updateById(dto, id)
+            );
+
+            verify(userService, times(1)).getAuthenticatedUser();
+            verify(categoryRepository, times(1)).findById(anyLong());
+
+            assertEquals("Categoria não encontrada!", e.getMessage());
+        }
+
+        @Test
+        @DisplayName("Deve lançar exceção ao tentar atualizar categoria de outro usuário")
+        void shouldThrowExceptionWhenUpdatingCategoryFromAnotherUser(){
+
+            User user = UserTestBuilder.aUser()
+                    .withUserId(UUID.randomUUID())
+                    .build();
+
+            User categoryUser = UserTestBuilder.aUser()
+                    .withUserId(UUID.randomUUID())
+                    .build();
+
+            Long id = 1L;
+
+            CategoryRequestDTO dto = new CategoryRequestDTO("House", CategoryType.EXPENSE);
+
+            Category category = CategoryTestBuilder.aCategory()
+                    .withCategoryId(id)
+                    .withUser(categoryUser)
+                    .build();
+
+            when(userService.getAuthenticatedUser()).thenReturn(user);
+            when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
+
+            UnauthorizedResourceAccessException e = assertThrows(
+                    UnauthorizedResourceAccessException.class,
+                    () -> service.updateById(dto, id)
+            );
+
+            verify(userService, times(1)).getAuthenticatedUser();
+            verify(categoryRepository, times(1)).findById(anyLong());
+
+            assertEquals("Acesso negado para atualização dessa categoria", e.getMessage());
         }
 
     }

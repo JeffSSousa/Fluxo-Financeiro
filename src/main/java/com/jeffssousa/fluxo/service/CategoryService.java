@@ -92,7 +92,7 @@ public class CategoryService {
 
         if (!category.getUser().equals(user)){
             log.warn("[DELETE] Category UNAUTHORIZED - user: {}, categoryId: {}", user.getEmail(), id);
-            throw new UnauthorizedResourceAccessException("Você não tem permissão de deletar");
+            throw new UnauthorizedResourceAccessException("Você não pode acessar essa categoria");
         }
 
         categoryRepository.delete(category);
@@ -108,7 +108,7 @@ public class CategoryService {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> {
                     log.warn("[UPDATE] Category NOT FOUND - user: {}, categoryId: {}", user.getEmail(), id);
-                    return new EntityNotFoundException("Categoria não encontrada");
+                    return new EntityNotFoundException("Categoria não encontrada!");
                 });
 
         if (!category.getUser().equals(user)){
