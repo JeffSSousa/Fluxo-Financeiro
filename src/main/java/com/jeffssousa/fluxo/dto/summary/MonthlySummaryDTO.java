@@ -6,6 +6,6 @@ public record MonthlySummaryDTO(
         String month,
         BigDecimal income,
         BigDecimal expense,
-        BigDecimal balancce
+        BigDecimal balance
 ) {
 }

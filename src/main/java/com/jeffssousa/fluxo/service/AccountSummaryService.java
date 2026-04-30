@@ -38,9 +38,6 @@ public class AccountSummaryService {
         BigDecimal totalIncomes = incomeRepository.sumByUser(user);
         BigDecimal totalExpenses = expenseRepository.sumByUser(user);
 
-        log.info(totalIncomes.toString());
-        log.info(totalExpenses.toString());
-
         BigDecimal balance = totalIncomes.subtract(totalExpenses);
 
         log.info(
@@ -68,8 +65,8 @@ public class AccountSummaryService {
 
         log.info("[READ] Yearly Summary - user: {}, year: {}", user.getEmail(), targetYear);
 
-        List<MonthlyAmountProjection> incomes = incomeRepository.findMonthlyIncomes(user.getUserId(),year);
-        List<MonthlyAmountProjection> expenses = expenseRepository.findMonthlyExpenses(user.getUserId(),year);
+        List<MonthlyAmountProjection> incomes = incomeRepository.findMonthlyIncomes(user.getUserId(),targetYear);
+        List<MonthlyAmountProjection> expenses = expenseRepository.findMonthlyExpenses(user.getUserId(),targetYear);
 
         Map<Integer, BigDecimal> incomesMap = convertToMap(incomes);
         Map<Integer, BigDecimal> expensesMap = convertToMap(expenses);
