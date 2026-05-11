@@ -44,7 +44,8 @@ public class ExpenseService {
                 dto.amount());
 
         Expense expense = mapper.toEntity(dto);
-        Category category = findOrCreateCategory(dto.category(),expense);
+        Category category = findOrCreateCategory(dto.category(),user);
+        expense.setCategory(category);
         expense.setUser(user);
 
         expense = expenseRepository.save(expense);
@@ -190,14 +191,12 @@ public class ExpenseService {
             expense.setStatus(dto.status());
         }
         if (dto.category() != null){
-           findOrCreateCategory(dto.category(), expense);
+          // findOrCreateCategory(dto.category(), expense);
         }
 
     }
 
-    private Category findOrCreateCategory(String name, Expense expense){
-
-        User user = userService.getAuthenticatedUser();
+    private Category findOrCreateCategory(String name, User user){
 
         Category category = categoryRepository.findByNameAndUserUserId(name, user.getUserId())
                 .orElseGet(() -> new Category(
@@ -215,7 +214,6 @@ public class ExpenseService {
                     category.getName());
         }
 
-        expense.setCategory(category);
         return category;
 
     }
