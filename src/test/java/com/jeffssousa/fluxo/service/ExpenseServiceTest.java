@@ -47,8 +47,8 @@ public class ExpenseServiceTest {
     class addExpense{
 
         @Test
-        @DisplayName("Deve salvar uma despesa com sucesso onde a categoria ja exista")
-        void shouldCreateAExpenseWithSuccess(){
+        @DisplayName("Deve salvar uma despesa quando a categoria já existir")
+        void shouldCreateExpenseWhenCategoryExists(){
 
             User user = UserTestBuilder.aUser().build();
             Category category = CategoryTestBuilder.aCategory()
@@ -93,6 +93,57 @@ public class ExpenseServiceTest {
             assertEquals(1L, expenseSaved.getCategory().getCategoryId());
 
         }
+
+        @Test
+        @DisplayName("Deve salvar uma despesa quando a categoria não existir")
+        void shouldCreateExpenseWhenCategoryDoesNotExist(){
+
+            User user = UserTestBuilder.aUser().build();
+            Category category = CategoryTestBuilder.aCategory()
+                    .withCategoryId(1L)
+                    .build();
+
+            Expense expense = ExpenseTestBuilder.anExpense()
+                    .build();
+
+            ExpenseRequestDTO dto = new ExpenseRequestDTO(
+                    expense.getDescription(),
+                    expense.getAmount(),
+                    expense.getTransactionDate(),
+                    expense.getDueDate(),
+                    expense.getStatus(),
+                    category.getName()
+            );
+
+            when(userService.getAuthenticatedUser()).thenReturn(user);
+            when(mapper.toEntity(dto)).thenReturn(expense);
+            when(categoryRepository.findByNameAndUserUserId(dto.category(), user.getUserId()))
+                    .thenReturn(Optional.empty());
+            when(categoryRepository.save(any(Category.class))).thenReturn(category);
+            when(expenseRepository.save(any(Expense.class))).thenReturn(expense);
+
+            Expense expenseSaved = service.addExpense(dto);
+
+            verify(userService, times(1)).getAuthenticatedUser();
+            verify(mapper, times(1)).toEntity(dto);
+            verify(categoryRepository, times(1)).findByNameAndUserUserId(
+                    dto.category(),
+                    user.getUserId()
+            );
+            verify(expenseRepository, times(1)).save(any(Expense.class));
+            verify(categoryRepository, times(1)).save(any(Category.class));
+
+            assertNotNull(expenseSaved);
+            assertEquals(dto.description(), expenseSaved.getDescription());
+            assertEquals(dto.amount(), expenseSaved.getAmount());
+            assertEquals(dto.transactionDate(), expenseSaved.getTransactionDate());
+            assertEquals(dto.dueDate(), expenseSaved.getDueDate());
+            assertEquals(dto.status(), expenseSaved.getStatus());
+            assertEquals(1L, expenseSaved.getCategory().getCategoryId());
+
+        }
+
+
 
     }
 
