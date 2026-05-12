@@ -107,7 +107,7 @@ public class ExpenseService {
         Expense expense = expenseRepository.findById(id)
                 .orElseThrow(() -> {
                     log.warn("[DELETE] Expense NOT FOUND - user: {}, expenseId: {}", user.getEmail(), id);
-                    return new TransactionNotFound("Expense não encontrada!");
+                    return new TransactionNotFound("Despesa não encontrada!");
                 });
 
         UUID expenseUserId = expense.getUser().getUserId();
@@ -141,10 +141,10 @@ public class ExpenseService {
             throw new UnauthorizedResourceAccessException("Você não pode acessar essa transação");
         }
 
-        updateExpense(dto, expense);
+        Integer affectedFields = updateExpense(dto, expense, user);
         expenseRepository.save(expense);
 
-        log.info("[UPDATE SUCCESS] Expense - user: {}, expenseId: {}", user.getEmail(), id);
+        log.info("[UPDATE SUCCESS] Expense - affected fields: {} , user: {}, expenseId: {}",affectedFields ,user.getEmail(), id);
 
         return mapper.toDto(expense);
 
@@ -176,24 +176,32 @@ public class ExpenseService {
     }
 
 
-    private void updateExpense(ExpenseRequestDTO dto, Expense expense) {
+    private Integer updateExpense(ExpenseRequestDTO dto, Expense expense, User user) {
+
+        int affectedFields = 0;
 
         if (dto.description() != null){
             expense.setDescription(dto.description());
+            affectedFields++;
         }
         if (dto.amount() != null){
             expense.setAmount(dto.amount());
+            affectedFields++;
         }
         if (dto.transactionDate() != null){
             expense.setTransactionDate(dto.transactionDate());
+            affectedFields++;
         }
         if (dto.status() !=  null){
             expense.setStatus(dto.status());
+            affectedFields++;
         }
         if (dto.category() != null){
-          // findOrCreateCategory(dto.category(), expense);
+          findOrCreateCategory(dto.category(), user);
+            affectedFields++;
         }
 
+        return affectedFields;
     }
 
     private Category findOrCreateCategory(String name, User user){
