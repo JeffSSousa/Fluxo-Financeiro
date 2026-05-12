@@ -155,7 +155,6 @@ public class ExpenseServiceTest {
 
     }
 
-
     @Nested
     class getAll{
 
@@ -671,20 +670,31 @@ public class ExpenseServiceTest {
                         .withUserId(UUID.randomUUID())
                         .build();
 
+                UUID id = UUID.randomUUID();
+
                 Expense expense = ExpenseTestBuilder.anExpense()
                         .withExpenseId(UUID.randomUUID())
                         .withUser( UserTestBuilder.aUser()
-                                .withUserId(UUID.randomUUID())
+                                .withUserId(id)
                                 .build()
                         )
                         .build();
+
+                ExpenseRequestDTO dto = new ExpenseRequestDTO(
+                        "Aluguel",
+                        BigDecimal.valueOf(1200),
+                        LocalDateTime.of(2025,5,30,12,21),
+                        LocalDate.of(2025,6,29),
+                        ExpenseStatus.NOT_PAID,
+                        "Casa"
+                );
 
                 when(userService.getAuthenticatedUser()).thenReturn(user);
                 when(expenseRepository.findById(expense.getExpenseId())).thenReturn(Optional.of(expense));
 
                 UnauthorizedResourceAccessException e = assertThrows(
                         UnauthorizedResourceAccessException.class,
-                        () -> service.deleteById(expense.getExpenseId())
+                        () -> service.updateById(expense.getExpenseId(), dto)
                 );
 
                 verify(userService, times(1)).getAuthenticatedUser();
@@ -697,4 +707,56 @@ public class ExpenseServiceTest {
             }
         }
 
+
+    @Nested
+    class getUpcoming15Expenses{
+
+        @Test
+        @DisplayName("Deve buscar as 15 próximas despesas a vencer")
+        void shouldFind15UpcomingExpenses(){
+
+            User user = UserTestBuilder.aUser().build();
+
+            LocalDate now = LocalDate.now();
+            LocalDate next15Days = LocalDate.now().plusDays(15);
+
+            Expense expense = ExpenseTestBuilder.anExpense()
+                    .withTransactionDate(LocalDateTime.now().plusDays(5))
+                    .withDueDate(LocalDate.now().plusDays(5))
+                    .build();
+
+           ExpenseResponseDTO dto = new ExpenseResponseDTO(
+                   UUID.randomUUID(),
+                   expense.getDescription(),
+                   expense.getAmount(),
+                   expense.getTransactionDate(),
+                   expense.getDueDate(),
+                   expense.getStatus(),
+                   null
+           );
+
+           when(userService.getAuthenticatedUser()).thenReturn(user);
+           when(expenseRepository.findTop15ByUserAndDueDateBetweenOrderByDueDateAsc(
+                   user,
+                   now,
+                   next15Days
+           )).thenReturn(List.of(expense));
+           when(mapper.toDto(expense)).thenReturn(dto);
+
+           List<ExpenseResponseDTO> response = service.getUpcoming15Expenses();
+
+           verify(userService, times(1)).getAuthenticatedUser();
+           verify(expenseRepository, times(1)).findTop15ByUserAndDueDateBetweenOrderByDueDateAsc(
+                   user,
+                   now,
+                   next15Days
+           );
+           verify(mapper, times(1)).toDto(expense);
+
+           assertNotNull(response);
+           assertEquals(1, response.size());
+
+        }
     }
+
+}
