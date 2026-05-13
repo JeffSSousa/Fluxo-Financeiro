@@ -44,7 +44,8 @@ public class IncomeService {
 
 
         Income income = mapper.toEntity(dto);
-        Category category = findOrCreateCategory(dto.category(), income);
+        Category category = findOrCreateCategory(dto.category(), user);
+        income.setCategory(category);
         income.setUser(user);
 
         income = incomeRepository.save(income);
@@ -109,7 +110,7 @@ public class IncomeService {
         Income income = incomeRepository.findById(id)
                 .orElseThrow(() -> {
                     log.warn("[DELETE] Income NOT FOUND - user: {}, incomeId: {}", user.getEmail(), id);
-                    return new TransactionNotFound("Income não encontrada!");
+                    return new TransactionNotFound("Receita não encontrada!");
                 });
 
         UUID incomeUserId = income.getUser().getUserId();
@@ -142,37 +143,44 @@ public class IncomeService {
             throw new UnauthorizedResourceAccessException("Você não pode acessar essa transação");
         }
 
-        updateIncome(dto, income);
+        int affectedFields = updateIncome(dto, income, user);
         incomeRepository.save(income);
 
-        log.info("[UPDATE SUCCESS] Income - user: {}, incomeId: {}", user.getEmail(), id);
+        log.info("[UPDATE SUCCESS] Income - affected fields: {}, user: {}, incomeId: {}",affectedFields , user.getEmail(), id);
 
         return mapper.toDTO(income);
 
     }
 
-    private void updateIncome(IncomeRequestDTO dto, Income income) {
+    private Integer updateIncome(IncomeRequestDTO dto, Income income, User user) {
+
+        int affectedFields = 0;
 
         if (dto.description() != null){
             income.setDescription(dto.description());
+            affectedFields++;
         }
         if (dto.amount() != null){
             income.setAmount(dto.amount());
+            affectedFields++;
         }
         if (dto.transactionDate() != null){
             income.setTransactionDate(dto.transactionDate());
+            affectedFields++;
         }
         if (dto.status() != null){
             income.setStatus(dto.status());
+            affectedFields++;
         }
         if (dto.category() != null){
-            findOrCreateCategory(dto.category(), income);
+            findOrCreateCategory(dto.category(), user);
+            affectedFields++;
         }
+
+        return affectedFields;
     }
 
-    private Category findOrCreateCategory(String name, Income income){
-
-        User user = userService.getAuthenticatedUser();
+    private Category findOrCreateCategory(String name, User user){
 
         Category category = categoryRepository.findByNameAndUserUserId(name, user.getUserId())
                 .orElseGet(() -> new Category(
@@ -190,7 +198,6 @@ public class IncomeService {
                     category.getName());
         }
 
-        income.setCategory(category);
         return category;
     }
 

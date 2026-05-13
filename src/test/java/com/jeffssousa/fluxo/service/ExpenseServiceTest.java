@@ -699,7 +699,7 @@ public class ExpenseServiceTest {
 
                 verify(userService, times(1)).getAuthenticatedUser();
                 verify(expenseRepository, times(1)).findById(expense.getExpenseId());
-                verify(expenseRepository, never()).deleteById(expense.getExpenseId());
+                verify(expenseRepository, never()).save(any(Expense.class));
                 verify(mapper, never()).toDto(expense);
 
                 assertNotNull(e);
