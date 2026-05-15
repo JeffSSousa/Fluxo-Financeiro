@@ -1,6 +1,7 @@
 package com.jeffssousa.fluxo.exception.handler;
 
 import com.jeffssousa.fluxo.exception.business.*;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -9,11 +10,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.Instant;
 
 @Slf4j
-@ControllerAdvice
+@RestControllerAdvice
 public class RestExceptionHandler {
 
 
@@ -47,6 +49,23 @@ public class RestExceptionHandler {
         return ResponseEntity.status(status).body(error);
 
     }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<StandardError> EntityNotFound(EntityNotFoundException e,HttpServletRequest request){
+        HttpStatus status = HttpStatus.NOT_FOUND;
+
+        StandardError error = new StandardError();
+        error.setTimestamp(Instant.now());
+        error.setStatus(status.value());
+        error.setMessage(e.getMessage());
+        error.setPath(request.getRequestURI());
+
+        log.warn(e.getMessage());
+
+        return ResponseEntity.status(status).body(error);
+
+    }
+
 
     @ExceptionHandler(TransactionNotFound.class)
     public ResponseEntity<StandardError> transactionNotFound(TransactionNotFound e,HttpServletRequest request){
