@@ -35,7 +35,7 @@ public class TransactionControllerTest {
     TransactionService service;
 
     @Autowired
-    ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
     @Nested
     class getTransactions{
