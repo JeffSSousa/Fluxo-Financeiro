@@ -82,7 +82,7 @@ public class ExpenseService {
         Expense expense = expenseRepository.findById(id)
                 .orElseThrow(() -> {
                     log.warn("[READ] Expense NOT FOUND - user: {}, expenseId: {}", user.getEmail(), id);
-                    return new TransactionNotFound("Expense não encontrada!");
+                    return new TransactionNotFound("Despesa não encontrada!");
                 });
 
         UUID expenseUserId = expense.getUser().getUserId();

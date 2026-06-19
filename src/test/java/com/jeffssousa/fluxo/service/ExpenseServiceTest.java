@@ -300,7 +300,7 @@ public class ExpenseServiceTest {
             verify(mapper, never()).toDto(any(Expense.class));
 
             assertNotNull(e);
-            assertEquals("Expense não encontrada!", e.getMessage());
+            assertEquals("Despesa não encontrada!", e.getMessage());
 
         }
 
