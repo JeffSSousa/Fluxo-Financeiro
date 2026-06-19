@@ -85,7 +85,7 @@ public class IncomeService {
         Income income = incomeRepository.findById(id)
                 .orElseThrow(() -> {
                     log.warn("[READ] Income NOT FOUND - user: {}, incomeId: {}", user.getEmail(), id);
-                    return new TransactionNotFound("Income não encontrada!");
+                    return new TransactionNotFound("Receita não encontrada!");
                 });
 
         UUID incomeUserId = income.getUser().getUserId();

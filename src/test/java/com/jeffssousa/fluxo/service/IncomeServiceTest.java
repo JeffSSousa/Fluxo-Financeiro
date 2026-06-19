@@ -299,7 +299,7 @@ public class IncomeServiceTest {
             verify(mapper, never()).toDTO(any(Income.class));
 
             assertNotNull(e);
-            assertEquals("Income não encontrada!", e.getMessage());
+            assertEquals("Receita não encontrada!", e.getMessage());
 
         }
 
