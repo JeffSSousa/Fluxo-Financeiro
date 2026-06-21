@@ -1,6 +1,9 @@
 package com.jeffssousa.fluxo.controller;
 
+import com.jeffssousa.fluxo.dto.login.LoginRequestDTO;
+import com.jeffssousa.fluxo.dto.login.LoginResponseDTO;
 import com.jeffssousa.fluxo.dto.user.UserCreateDTO;
+import com.jeffssousa.fluxo.service.AuthService;
 import com.jeffssousa.fluxo.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +21,8 @@ public class AuthController {
 
     private final UserService userService;
 
+    private final AuthService authService;
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody UserCreateDTO dto){
 
@@ -25,4 +30,11 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO request){
+
+        LoginResponseDTO response = authService.login(request);
+
+        return ResponseEntity.ok(response);
+    }
 }

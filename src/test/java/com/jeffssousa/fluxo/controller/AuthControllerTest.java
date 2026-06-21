@@ -3,6 +3,7 @@ package com.jeffssousa.fluxo.controller;
 import com.jeffssousa.fluxo.dto.user.UserCreateDTO;
 import com.jeffssousa.fluxo.exception.business.EmailAlreadyExistsException;
 import com.jeffssousa.fluxo.exception.handler.RestExceptionHandler;
+import com.jeffssousa.fluxo.service.AuthService;
 import com.jeffssousa.fluxo.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -30,6 +31,9 @@ public class AuthControllerTest {
 
     @MockitoBean
     UserService service;
+
+    @MockitoBean
+    AuthService authService;
 
     @Autowired
     private ObjectMapper objectMapper;
