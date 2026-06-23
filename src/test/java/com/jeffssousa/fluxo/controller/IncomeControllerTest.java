@@ -8,11 +8,13 @@ import com.jeffssousa.fluxo.enums.IncomeStatus;
 import com.jeffssousa.fluxo.exception.business.TransactionNotFound;
 import com.jeffssousa.fluxo.exception.business.UnauthorizedResourceAccessException;
 import com.jeffssousa.fluxo.exception.handler.RestExceptionHandler;
+import com.jeffssousa.fluxo.security.JwtAuthenticationFilter;
 import com.jeffssousa.fluxo.service.IncomeService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
@@ -39,6 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(IncomeController.class)
+@AutoConfigureMockMvc(addFilters = false)
 @Import(RestExceptionHandler.class)
 public class IncomeControllerTest {
 
@@ -50,6 +53,9 @@ public class IncomeControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @MockitoBean
+    JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Nested
     class addIncome{
@@ -96,7 +102,6 @@ public class IncomeControllerTest {
 
             String json = objectMapper.writeValueAsString(request);
 
-            verify(service, never()).addIncome(request);
 
             ResultActions result = mvc.perform(
                     MockMvcRequestBuilders
@@ -105,6 +110,7 @@ public class IncomeControllerTest {
                             .content(json)
             );
 
+            verify(service, never()).addIncome(request);
 
             result
                     .andExpect(status().isBadRequest());

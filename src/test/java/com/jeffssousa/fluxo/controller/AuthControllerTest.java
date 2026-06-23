@@ -3,12 +3,14 @@ package com.jeffssousa.fluxo.controller;
 import com.jeffssousa.fluxo.dto.user.UserCreateDTO;
 import com.jeffssousa.fluxo.exception.business.EmailAlreadyExistsException;
 import com.jeffssousa.fluxo.exception.handler.RestExceptionHandler;
+import com.jeffssousa.fluxo.security.JwtAuthenticationFilter;
 import com.jeffssousa.fluxo.service.AuthService;
 import com.jeffssousa.fluxo.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
@@ -23,6 +25,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(AuthController.class)
+@AutoConfigureMockMvc(addFilters = false)
 @Import(RestExceptionHandler.class)
 public class AuthControllerTest {
 
@@ -37,6 +40,9 @@ public class AuthControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @MockitoBean
+    JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Nested
     class register{

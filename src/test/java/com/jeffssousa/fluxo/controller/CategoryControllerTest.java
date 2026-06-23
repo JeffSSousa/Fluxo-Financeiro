@@ -5,12 +5,14 @@ import com.jeffssousa.fluxo.dto.category.CategoryResponseDTO;
 import com.jeffssousa.fluxo.enums.CategoryType;
 import com.jeffssousa.fluxo.exception.business.UnauthorizedResourceAccessException;
 import com.jeffssousa.fluxo.exception.handler.RestExceptionHandler;
+import com.jeffssousa.fluxo.security.JwtAuthenticationFilter;
 import com.jeffssousa.fluxo.service.CategoryService;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
@@ -30,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(CategoryController.class)
+@AutoConfigureMockMvc(addFilters = false)
 @Import(RestExceptionHandler.class)
 public class CategoryControllerTest {
 
@@ -42,6 +45,8 @@ public class CategoryControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @MockitoBean
+    JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Nested
     class createCategory{

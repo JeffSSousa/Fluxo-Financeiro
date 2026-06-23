@@ -5,6 +5,7 @@ import com.jeffssousa.fluxo.dto.user.ProfileResponseDTO;
 import com.jeffssousa.fluxo.exception.business.InvalidPasswordException;
 import com.jeffssousa.fluxo.exception.business.PasswordMismatchException;
 import com.jeffssousa.fluxo.exception.handler.RestExceptionHandler;
+import com.jeffssousa.fluxo.security.JwtAuthenticationFilter;
 import com.jeffssousa.fluxo.service.UserProfileService;
 import com.jeffssousa.fluxo.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
@@ -28,6 +30,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(UserController.class)
+@AutoConfigureMockMvc(addFilters = false)
 @Import(RestExceptionHandler.class)
 public class UserControllerTest {
 
@@ -43,6 +46,8 @@ public class UserControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @MockitoBean
+    JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Nested
     class getProfile{

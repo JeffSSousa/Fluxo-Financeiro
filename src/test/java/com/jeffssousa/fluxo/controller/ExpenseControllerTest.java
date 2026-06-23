@@ -8,11 +8,13 @@ import com.jeffssousa.fluxo.enums.ExpenseStatus;
 import com.jeffssousa.fluxo.exception.business.TransactionNotFound;
 import com.jeffssousa.fluxo.exception.business.UnauthorizedResourceAccessException;
 import com.jeffssousa.fluxo.exception.handler.RestExceptionHandler;
+import com.jeffssousa.fluxo.security.JwtAuthenticationFilter;
 import com.jeffssousa.fluxo.service.ExpenseService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
@@ -35,6 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ExpenseController.class)
+@AutoConfigureMockMvc(addFilters = false)
 @Import(RestExceptionHandler.class)
 public class ExpenseControllerTest {
 
@@ -46,6 +49,9 @@ public class ExpenseControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @MockitoBean
+    JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Nested
     class addExpense{
