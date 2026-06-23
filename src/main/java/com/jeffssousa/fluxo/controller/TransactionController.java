@@ -2,6 +2,7 @@ package com.jeffssousa.fluxo.controller;
 
 import com.jeffssousa.fluxo.dto.transaction.TransactionDTO;
 import com.jeffssousa.fluxo.service.TransactionService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,10 @@ public class TransactionController {
 
     private final TransactionService service;
 
+    @Operation(
+            summary = "Buscar todas as transações.",
+            description = "Retorna todas as transações de receita e despesa"
+    )
     @GetMapping
     public ResponseEntity<List<TransactionDTO>> getTransactions(){
 
