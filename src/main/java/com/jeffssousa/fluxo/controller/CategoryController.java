@@ -3,6 +3,7 @@ package com.jeffssousa.fluxo.controller;
 import com.jeffssousa.fluxo.dto.category.CategoryRequestDTO;
 import com.jeffssousa.fluxo.dto.category.CategoryResponseDTO;
 import com.jeffssousa.fluxo.service.CategoryService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Categoria", description = "Endpoints para gerenciamento de categorias.")
 @RestController
 @RequestMapping("category")
 @RequiredArgsConstructor

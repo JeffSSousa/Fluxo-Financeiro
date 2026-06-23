@@ -3,6 +3,7 @@ package com.jeffssousa.fluxo.controller;
 import com.jeffssousa.fluxo.dto.income.IncomeRequestDTO;
 import com.jeffssousa.fluxo.dto.income.IncomeResponseDTO;
 import com.jeffssousa.fluxo.service.IncomeService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+@Tag(name = "Receita", description = "Endpoints para gerenciamento de Receita.")
 @RestController
 @RequestMapping("income")
 @RequiredArgsConstructor

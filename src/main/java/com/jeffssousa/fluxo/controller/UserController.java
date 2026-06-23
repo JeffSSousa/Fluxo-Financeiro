@@ -4,11 +4,13 @@ import com.jeffssousa.fluxo.dto.user.AlterPasswordDTO;
 import com.jeffssousa.fluxo.dto.user.ProfileResponseDTO;
 import com.jeffssousa.fluxo.service.UserProfileService;
 import com.jeffssousa.fluxo.service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "Usuario", description = "Endpoints para gerenciamento de conta do usuario.")
 @RestController
 @RequestMapping("user")
 @RequiredArgsConstructor

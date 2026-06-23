@@ -4,6 +4,7 @@ package com.jeffssousa.fluxo.controller;
 import com.jeffssousa.fluxo.dto.expense.ExpenseRequestDTO;
 import com.jeffssousa.fluxo.dto.expense.ExpenseResponseDTO;
 import com.jeffssousa.fluxo.service.ExpenseService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+@Tag(name = "Despesa", description = "Endpoints para gerenciamento de Despesa.")
 @RestController
 @RequestMapping("expense")
 @RequiredArgsConstructor

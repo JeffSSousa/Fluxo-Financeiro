@@ -5,6 +5,7 @@ import com.jeffssousa.fluxo.dto.login.LoginResponseDTO;
 import com.jeffssousa.fluxo.dto.user.UserCreateDTO;
 import com.jeffssousa.fluxo.service.AuthService;
 import com.jeffssousa.fluxo.service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "Autenticação", description = "Endpoints para autenticação.")
 @RestController
 @RequestMapping("auth")
 @RequiredArgsConstructor
