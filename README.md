@@ -1,6 +1,9 @@
 # Fluxo - Financial Management System
 
-    A modern financial management platform developed using Java and Spring Boot, adhering to software engineering best practices and Clean Architecture principles, including automated testing, authentication and authorization, JWT-based security, and documentation using Swagger/OpenAPI.
+    A modern financial management platform developed using Java and Spring Boot
+    adhering to software engineering best practices and Clean Architecture
+    principles, including automated testing, authentication and authorization,
+    JWT-based security, and documentation using Swagger/OpenAPI.
 
 
 ## Environments
