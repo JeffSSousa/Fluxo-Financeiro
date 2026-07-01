@@ -20,15 +20,16 @@
  - [x] MVC architecture definition
  - [x] Initial project documentation
  - [x] Development profile configuration
+ - [x] MapStruct configuration
 
  ### Homologation Environment
 
  - [ ] PostgreSQL database configuration
  - [ ] Postgres Docker container
+ - [ ] Fluxo API containerization
  - [ ] Test environment configuration
  - [ ] Front-end tests
  - [ ] Protect Swagger documentation
- - [ ] MapStruct configuration
 
  ### Production Environment
 
@@ -37,30 +38,30 @@
 
  ### Authentication & User Management
 
- - [ ] JWT authentication
- - [ ] Register Account
- - [ ] View Profile
- - [ ] Alter Password
- - [ ] Encrypted password
+ - [x] JWT authentication
+ - [x] Register Account
+ - [x] View Profile
+ - [x] Alter Password
+ - [x] Encrypted password
 
  ### Financial Management
 
- - [ ] Expense Managment
- - [ ] Income Managment
- - [ ] Category Managment
- - [ ] View upcoming due dates
- - [ ] View All Transactions
+ - [x] Expense Managment
+ - [x] Income Managment
+ - [x] Category Managment
+ - [x] View upcoming due dates
+ - [x] View All Transactions
 
  ### Dashboard
 
- - [ ] View account summary
- - [ ] View monthly summary
+ - [x] View account summary
+ - [x] View monthly summary
 
  ### Business Rules
 
- - [ ] Standardize exceptions
- - [ ] Implements validations
- - [ ] Validate access authorization
+ - [x] Standardize exceptions
+ - [x] Implements validations
+ - [x] Validate access authorization
 
  ### Quality and infrastructure
 
@@ -68,10 +69,10 @@
  - [ ] Clean up boilerplates
  - [ ] Refactor inconsistent names
  - [ ] Implement Flyway
- - [ ] Logs and observability
+ - [x] Logs and observability
 
  ### Documentation
  
- - [ ] Implement tags in Swagger documentation
- - [ ] Implement operations in Swagger documentation
+ - [x] Implement tags in Swagger documentation
+ - [x] Implement operations in Swagger documentation
  - [ ] Implement ApiResponses in Swagger documentation
