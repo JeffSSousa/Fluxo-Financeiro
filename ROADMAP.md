@@ -23,6 +23,13 @@
 
  ### Homologation Environment
 
+ - [ ] PostgreSQL database configuration
+ - [ ] Postgres Docker container
+ - [ ] Test environment configuration
+ - [ ] Front-end tests
+ - [ ] Protect Swagger documentation
+ - [ ] MapStruct configuration
+
  ### Production Environment
 
 
@@ -30,14 +37,41 @@
 
  ### Authentication & User Management
 
+ - [ ] JWT authentication
+ - [ ] Register Account
+ - [ ] View Profile
+ - [ ] Alter Password
+ - [ ] Encrypted password
+
  ### Financial Management
 
- ### Category Management
+ - [ ] Expense Managment
+ - [ ] Income Managment
+ - [ ] Category Managment
+ - [ ] View upcoming due dates
+ - [ ] View All Transactions
 
  ### Dashboard
 
+ - [ ] View account summary
+ - [ ] View monthly summary
+
  ### Business Rules
 
- ### Quality
+ - [ ] Standardize exceptions
+ - [ ] Implements validations
+ - [ ] Validate access authorization
+
+ ### Quality and infrastructure
+
+ - [ ] Refactor the architecture to a Package-by-Feature architecture
+ - [ ] Clean up boilerplates
+ - [ ] Refactor inconsistent names
+ - [ ] Implement Flyway
+ - [ ] Logs and observability
 
  ### Documentation
+ 
+ - [ ] Implement tags in Swagger documentation
+ - [ ] Implement operations in Swagger documentation
+ - [ ] Implement ApiResponses in Swagger documentation
