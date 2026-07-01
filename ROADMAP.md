@@ -27,6 +27,7 @@
  - [ ] PostgreSQL database configuration
  - [ ] Postgres Docker container
  - [ ] Fluxo API containerization
+ - [ ] Environment variables configuration (.env)
  - [ ] Test environment configuration
  - [ ] Front-end tests
  - [ ] Protect Swagger documentation
