@@ -1,98 +1,151 @@
 # Fluxo - Financial Management System
 
-    A modern financial management platform developed using Java and Spring Boot
-    adhering to software engineering best practices and Clean Architecture
-    principles, including automated testing, authentication and authorization,
-    JWT-based security, and documentation using Swagger/OpenAPI.
+A financial management platform developed with Java and Spring Boot, focused on
+maintainability, security, automated testing, and scalable software architecture.
 
+The project is evolving toward a **Package-by-Feature architecture**, organizing
+the application around business features and domain boundaries. This approach
+is intended to improve maintainability while establishing clearer boundaries
+for a potential future evolution toward a **microservices architecture**.
 
 ## Environments
 
 | Environment | Status |
-|------------|--------|
-| Development | ✅ |
+|-------------|--------|
+| Development | ✅ Active |
 | Homologation | 🚧 Planned |
 | Production | 🚧 Planned |
 
-    Current milestone: development Environment
-    Next milestone:  
-
 For the complete roadmap and future milestones, see the dedicated documentation:
 
-[ROADMAP.md](/ROADMAP.md)
+[ROADMAP.md](./ROADMAP.md)
 
 
-### Table of Contents
+## Table of Contents
+
 - [About](#about)
 - [Business](#business)
-- [Technologies used](#technologies-used)
+- [Technologies Used](#technologies-used)
 - [Project Structure](#project-structure)
 - [How to Run](#how-to-run)
-- [About the Autor](#-about-the-author)
+- [About the Author](#-about-the-author)
 
 
 
 ## About
 
-Fluxo is a personal financial management platform designed to help users manage their finances through an intuitive and scalable application.
+Fluxo is a personal financial management platform designed to help users
+organize and manage their finances through an intuitive and reliable
+application.
 
-The project is being developed with a strong focus on software architecture, maintainability, security and cloud-native practices.
+The project is being developed with a strong focus on software architecture,
+maintainability, security, automated testing, and production readiness.
 
-Although still under development, the project follows a production-oriented development lifecycle, including multiple environments, versioning strategy and engineering best practices.
+The backend is currently being evolved toward a **Package-by-Feature
+architecture**, organizing the application around business features and clearer
+domain boundaries. This structure is intended to support maintainability and
+facilitate a potential future evolution toward a **microservices architecture**.
+
+The project follows an incremental development process, where new functionality
+is introduced alongside automated tests, architectural improvements,
+documentation, and infrastructure evolution.
 
 ## Business
+
+### Current Features
 
 - Financial control
 - Income management
 - Expense management
+- Category management
 - Dashboard
-- Reports
+- Transaction management
+- Upcoming due dates
 - Authentication
-- User management
+- User profile management
+
+### Planned Features
+
+- Reports
 - Notifications
 - Credit management
 - Goal tracking
-- WhatsApp chatbot implementation
-- Cloud deployment
+- WhatsApp chatbot
 
-## Technologies used
+## Technologies Used
 
-- Java
+### Backend
+
+- Java 21
 - Spring Boot
 - Spring Security
+- Spring Data JPA
+- Hibernate
 - PostgreSQL
-- H2 Console
+- H2
 - JWT
-- Maven
+- Bean Validation
+- MapStruct
+
+### Testing
+
 - JUnit
 - Mockito
+
+### Documentation
+
 - Swagger/OpenAPI
-- Bean Validation
-- Mapstruct
+
+### Build
+
+- Maven
 
 
 ## Project Structure
 
-The project currently follows the MVC (Model-View-Controller) architectural pattern, with a strong focus on separation of concerns, maintainability and scalability.
+## Project Structure
 
-    
+The project follows a **Package-by-Feature architecture**, organizing the
+application around business features rather than technical layers.
+
+This structure improves separation of responsibilities and creates clearer
+boundaries between business domains, making the application easier to maintain
+and evolve.
+
+```text
     src/main/java/com/jeffssousa/fluxo
     │
+    ├── account/          # Account summary and financial overview
+    ├── auth/             # Authentication and user registration
+    ├── category/         # Category management
+    ├── expense/          # Expense management
+    ├── income/           # Income management
+    ├── profile/          # User profile management
+    ├── transaction/      # Transaction queries and management
     │
-    ├── config          # Application and framework configurations
-    ├── controller      # REST API endpoints
-    ├── dto             # Data Transfer Objects
-    ├── entities        # Domain entities and JPA models
-    ├── enums           # Enumerations used throughout the application
-    ├── exceptions
-    │   ├── business    # Business exceptions
-    │   └── handler     # Global exception handlers
-    ├── mapper          # Entity and DTO mappings
-    ├── repository      # Data access layer
-    ├── security        # Authentication and authorization
-    └── service         # Business rules and application services
+    ├── config/           # Application and framework configuration
+    ├── exception/        # Global and business exception handling
+    └── security/         # Authentication and authorization configuration
+```
 
-This structure provides a clear separation between presentation, business and persistence layers, allowing the project to evolve toward more advanced architectural patterns in future versions.
+Each business feature contains the components related to its own domain,
+such as controllers, DTOs, services, repositories, entities, and mappers.
+
+### Example:
+```text
+expense/
+    │
+    ├── controller/
+    ├── dto/
+    ├── entity/
+    ├── mapper/
+    ├── repository/
+    └── service/
+```
+
+The architecture is being structured as a modular monolith, with the goal of
+maintaining clear domain boundaries and facilitating a potential future
+evolution toward a microservices architecture.
 
 
 ## How to Run
@@ -101,64 +154,70 @@ This structure provides a clear separation between presentation, business and pe
 
 Before running the application, make sure you have installed:
 
-* Java 21+
-* Maven 3.9+
-* Git
+- Java 21+
+- Maven 3.9+
+- Git
 
-### Clone the repository
+### Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/fluxo.git
-
-cd fluxo
+git clone https://github.com/JeffSSousa/Fluxo-Financeiro.git
+cd Fluxo-Financeiro
 ```
 
 ### Environment Variables
 
-Before running the application, configure the JWT secret key in your environment variables.
+The application requires a JWT secret to generate and validate authentication
+tokens.
 
-The application expects the following property in the `application.yml` file:
+
+Configure the following environment variable:
+
+```properties
+JWT_SECRET=your-super-secret-jwt-key
+```
+
+The application reads this value through application.yml:
 
 ```yaml
 jwt:
   secret: ${JWT_SECRET}
 ```
 
-Create an environment variable named `JWT_SECRET` and assign a secure secret key value.
 
-Example:
+> **Note:** For security reasons, sensitive information such as JWT secrets should never be hardcoded into the source code or committed to the repository.
 
-```bash
-JWT_SECRET=your-super-secret-jwt-key
-```
-
-This key is used by the application to generate and validate JWT authentication tokens.
-
-> **Note:** For security reasons, sensitive information such as JWT secret keys should never be hardcoded into the source code or committed to the repository.
 
 
 ### Run the application
 
-Using Maven:
+Using the Maven Wrapper:
 
 ```bash
 ./mvnw spring-boot:run
 ```
 
-Or run the main class directly from your IDE.
+On Windows:
+
+```bash
+mvnw.cmd spring-boot:run
+```
+
+You can also run the main application class directly from your IDE.
 
 
 ### Development Environment
 
-The project is currently running in the **development environment**, using an embedded H2 database for rapid development and testing.
+The application currently runs in the development environment using an
+embedded H2 database.
 
 Current configuration:
 
-* Database: H2 In-Memory
-* Profile: dev
-* Authentication: JWT
-* API Documentation: Under development
-* Containerization: Planned for future versions
+- Database: H2 In-Memory
+- Profile: dev
+- Authentication: JWT
+- API Documentation: Swagger/OpenAPI
+- Containerization: Planned
 
 ### Access H2 Console
 
@@ -182,7 +241,8 @@ Password:
 http://localhost:8080
 ```
 
-> Note: Docker, PostgreSQL, CI/CD pipelines and cloud deployment will be introduced in future versions as part of the project's roadmap.
+> Note: PostgreSQL, Docker, CI/CD, and cloud deployment will be introduced in future
+development cycles according to the project roadmap.
 
 
 <br><br>
