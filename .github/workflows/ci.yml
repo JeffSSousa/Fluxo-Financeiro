@@ -16,6 +16,10 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: ./fluxo-system
+
     steps:
 
       - name: Checkout repository
