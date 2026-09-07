@@ -64,7 +64,7 @@ public class AccountSummaryServiceTest {
             verify(incomeRepository, times(1)).sumByUser(any(User.class));
             verify(expenseRepository, times(1)).sumByUser(any(User.class));
 
-            assertEquals(totalIncomes.toString(), response.totalIncomes().toString());
+            assertEquals(totalIncomes.toString(), response.totalIncome().toString());
             assertEquals(totalExpenses.toString(), response.totalExpense().toString());
             assertEquals(balance.toString(), response.balance().toString());
         }
