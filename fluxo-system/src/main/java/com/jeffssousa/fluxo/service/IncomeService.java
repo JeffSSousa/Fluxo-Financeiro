@@ -173,7 +173,8 @@ public class IncomeService {
             affectedFields++;
         }
         if (dto.category() != null){
-            findOrCreateCategory(dto.category(), user);
+            Category category = findOrCreateCategory(dto.category(), user);
+            income.setCategory(category);
             affectedFields++;
         }
 
