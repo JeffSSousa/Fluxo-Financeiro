@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
@@ -19,7 +20,7 @@ public record UserCreateDTO(
 
         @Schema(
                 description = "Senha de acesso do usuário",
-                example = "Senha@123"
+                example = "*************"
         )
         @NotBlank(message = "Digite a Senha!")
         String password,
@@ -29,6 +30,10 @@ public record UserCreateDTO(
                 example = "Jefferson"
         )
         @NotBlank(message = "É obrigatorio conter o nome!")
+        @Size(
+                max = 100,
+                message = "O nome deve conter no máximo 100 caracteres"
+        )
         String name,
 
         @Schema(

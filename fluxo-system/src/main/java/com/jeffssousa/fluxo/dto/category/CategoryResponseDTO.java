@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public record CategoryResponseDTO(
         @Schema(description = "ID da Categoria")
         Long categoryId,
-        @Schema(description = "Nome da categoria")
+        @Schema(description = "Identificador da categoria")
         String name,
         @Schema(description = "Tipo da categoria")
         CategoryType type

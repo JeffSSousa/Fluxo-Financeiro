@@ -20,7 +20,7 @@ public record ExpenseResponseDTO(
         @Schema(description = "Valor da despesa")
         BigDecimal amount,
 
-        @Schema(description = "Data e hora em que a despesa foi registrada")
+        @Schema(description = "Data e hora em que a despesa foi realizada")
         LocalDateTime transactionDate,
 
         @Schema(description = "Data de vencimento da despesa")

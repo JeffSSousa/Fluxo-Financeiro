@@ -71,7 +71,7 @@ public class AccountSummaryControllerTest {
 
             result
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.totalIncomes").value(response.totalIncomes()))
+                    .andExpect(jsonPath("$.totalIncome").value(response.totalIncome()))
                     .andExpect(jsonPath("$.totalExpense").value(response.totalExpense()))
                     .andExpect(jsonPath("$.balance").value(response.balance()));
 
