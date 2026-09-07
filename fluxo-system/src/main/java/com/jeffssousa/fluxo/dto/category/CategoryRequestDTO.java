@@ -11,7 +11,7 @@ public record CategoryRequestDTO(
         @NotBlank
         @Size(max = 50, message = "O nome deve conter no maximo 50 caracteres")
         String name,
-        @Schema(description = "Tipo da categoria", example = "INCOME ou EXPENSE")
+        @Schema(description = "Tipo da categoria", example = "INCOME")
         @NotNull(message = "Toda categoria deve conter um tipo (INCOME ou EXPENSE)")
         CategoryType type
     ) {

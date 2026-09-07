@@ -12,8 +12,8 @@ opportunities are identified throughout the development lifecycle.
 
 **Objective:** Review the current implementation before starting the next development cycle.
 
-- [ ] Review entities and relationships
-- [ ] Review DTOs
+- [x] Review entities and relationships
+- [x] Review DTOs
 - [ ] Review controllers
 - [ ] Review services
 - [ ] Review repositories

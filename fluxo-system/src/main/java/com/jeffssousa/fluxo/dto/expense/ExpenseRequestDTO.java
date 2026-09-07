@@ -2,8 +2,7 @@ package com.jeffssousa.fluxo.dto.expense;
 
 import com.jeffssousa.fluxo.enums.ExpenseStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -16,6 +15,10 @@ public record ExpenseRequestDTO(
                 example = "Conta de energia elétrica"
         )
         @NotBlank(message = "É obrigatorio conter uma descrição!")
+        @Size(
+                max = 255,
+                message = "A descrição deve conter no máximo 255 caracteres"
+        )
         String description,
 
         @Schema(
@@ -23,6 +26,10 @@ public record ExpenseRequestDTO(
                 example = "189.90"
         )
         @NotNull(message = "É obrigatorio conter o valor!")
+        @DecimalMin(
+                value = "0.01",
+                message = "O valor deve ser maior que zero"
+        )
         BigDecimal amount,
 
         @Schema(

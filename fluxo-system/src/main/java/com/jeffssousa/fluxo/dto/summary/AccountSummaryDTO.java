@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 public record AccountSummaryDTO(
 
         @Schema(description = "Valor total de receitas registradas")
-        BigDecimal totalIncomes,
+        BigDecimal totalIncome,
 
         @Schema(description = "Valor total de despesas registradas")
         BigDecimal totalExpense,
