@@ -15,8 +15,8 @@ opportunities are identified throughout the development lifecycle.
 - [x] Review entities and relationships
 - [x] Review DTOs
 - [ ] Review controllers
-- [ ] Review services
-- [ ] Review repositories
+- [x] Review services
+- [x] Review repositories
 - [ ] Review mappers
 - [ ] Review exception handling
 - [ ] Review JWT/Security

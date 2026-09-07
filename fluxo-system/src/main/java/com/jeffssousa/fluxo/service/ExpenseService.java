@@ -197,7 +197,8 @@ public class ExpenseService {
             affectedFields++;
         }
         if (dto.category() != null){
-          findOrCreateCategory(dto.category(), user);
+          Category category = findOrCreateCategory(dto.category(), user);
+          expense.setCategory(category);
             affectedFields++;
         }
 

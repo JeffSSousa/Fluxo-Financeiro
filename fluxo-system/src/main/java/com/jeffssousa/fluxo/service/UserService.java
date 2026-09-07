@@ -11,6 +11,7 @@ import com.jeffssousa.fluxo.exception.business.PasswordMismatchException;
 import com.jeffssousa.fluxo.mapper.UserProfileMapper;
 import com.jeffssousa.fluxo.repository.UserProfileRepository;
 import com.jeffssousa.fluxo.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,6 +34,7 @@ public class UserService {
 
     private final PasswordEncoder encoder;
 
+    @Transactional
     public void register(UserCreateDTO dto){
 
         log.info("[CREATE] User - email: {}", dto.email());
