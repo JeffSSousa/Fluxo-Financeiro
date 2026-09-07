@@ -16,7 +16,7 @@ public record LoginRequestDTO(
 
         @Schema(
                 description = "Senha de acesso do usuário",
-                example = "Senha@123"
+                example = "***********"
         )
         @NotBlank
         String password
