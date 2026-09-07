@@ -10,7 +10,6 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -28,6 +27,8 @@ public class Expense {
     private String description;
     private BigDecimal amount;
     private LocalDateTime transactionDate;
+
+    @Enumerated(EnumType.STRING)
     private ExpenseStatus status; // paid/ not paid
     private LocalDate dueDate;
 
